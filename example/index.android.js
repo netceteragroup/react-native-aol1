@@ -1,13 +1,3 @@
-//interstitial-top-5
-//alias={'nzz-app-top-5'}
-//type=banner
-//height=160
-/*
-<AdtechView
-  style={styles.empty_syle}
-  alias={'nzz-app-top-5'}
-  />
-*/
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -35,7 +25,7 @@ export default class example extends Component {
         </Text>
         <AdtechView
           style={styles.empty_syle}
-          alias={'nzz-app-top-5'}
+          alias={'your_add'}
           type={'banner'}
           height={160}
           />
