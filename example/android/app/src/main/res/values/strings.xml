@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">AdTechDemo</string>
+    <string name="ad_programatically_message">This creative was added programmatically.</string>
+    <string name="ad_from_layout_message">This creative was added from the XML layout.</string>
+    <string name="ad_hardware_acceleration_message">Hardware acceleration feature is enabled every time an ad is loaded successfully with a signal equal to 123.</string>
+    <string name="interstitial_ad_message">This is an interstitial ad. You can close it manually or have it disappear after a given time interval. If the below option is checked, then the interstitial will be programmatically dismissed after a few seconds.</string>
+    <string name="video_ad_message">Rotate your device to landscape orientation in
+		order to go fullscreen once the video is loaded.</string>
+    <string name="vast_model_message">Sample that showcases an ADTECH video player along with the fetching and presentation of companion ads for the linears delivered by the player.</string>
+    <string name="vast_companions_message">Sample that showcases an ADTECH video player and the companion views that are received via the onLinearAdStarted callback method.</string>
+    <string name="vast_media_controller_message">Sample that showcases an ADTECH video player with a native media controller.</string>
+    <string name="vast_skip_offset_message">Sample that showcases an ADTECH video player which displays the exposed skip offset time.</string>
+    <string name="ad_resize_1">Buttons move to accommodate resizing of the top banner.</string>
+    <string name="ad_resize_2">Buttons are covered by the resized ads.</string>
+    <string name="ad_auto_hide_message">This is a sample that showcases the Auto Hide feature of the SDK. You can enable this via the setHideAfterRefreshInterval(boolean) method of the BaseAdConfiguration extensions. \n \n After an Ad is loaded the banner waits for the refresh interval to expire. Once that happens, instead of loading a new ad, the banner is hidden. \n \n New ads can still be loaded if the load() method is called. Also the banner\'s visibility has to be changed to View.VISIBLE.</string>
+    <string name="ad_auto_hie_bottom_label">This label is visible while the banner is hidden.</string>
+    <string name="ad_lazy_load_message">This is a sample that provides an implementation for lazy loading of ads. The banner is hidden until an ad is loaded. Once the ad is loaded it becomes visible.</string>
+    <string name="ad_landing_page_via_browser_message">&lt;b>setOpenLandingPagesThroughBrowser()&lt;/b>&lt;br>This is a sample that showcases the landing page handlings of the SDK. If setOpenLandingPagesThroughBrowser(boolean) is called with true (which is the default value) all links called by the ad will be treated as webpage calls. &lt;br>&lt;br> In this case the browser will handle the URI and decide whether it is a webpage or a special request (i.e phonecall). &lt;br>&lt;br> If the method is called with false the SDK does the URI check instead of the browser.&lt;br>&lt;br>&lt;b>Using custom in-app browsers&lt;/b>&lt;br>Use the radio buttons to switch between the 3 possibilities of landing page openings: via the sdk, which redirects to the default device browser; via a modal browser, which is an activity with a webview; or via a non-modal browser, which is a web-view on this activity.</string>
+    <string name="ad_custom_load">Loading new ad.</string>
+    <string name="ad_custom_success">Banner is shown until receiving custom mediation</string>
+    <string name="ad_custom_default">Received default ad.Press load for new ad.</string>
+    <string name="ad_custom_failed">Failed loading ad. Press load to try again. </string>
+    <string name="ad_custom_event_received">Received custom mediation event. It is now time to perform your own custom logic. \n \n Call load again when done.</string>
+    <string name="load_interstitial_button_message">Load interstitial</string>
+    <string name="dismiss_interstitial_option_message">Programmatic dismiss</string>
+    <string name="custom_close_from_resource_descr">The custom close button\'s background is passed through the CloseButtonConfiguration.</string>
+    <string name="custom_close_from_resource_in_xml_descr">The custom close button\'s background is declared in the XML Layout.</string>
+    <string name="custom_close_button_descr">The custom close button instance is passed through the CloseButtonConfiguration.</string>
+    <string name="orientation_screen_description">Depending on screen orientation, the content of this activity is different.</string>
+    <string name="geolocation_sdk_option_description">When location reporting is set to SDK mode, the SDK obtains the location on its own and sends it out with each request, if location reporting is enabled remotely as well. The SDK obtains the location by creating internally an instance of LocationManager and monitoring significant location changes.</string>
+    <string name="geolocation_app_option_description">"When location reporting is set to App mode, it becomes the responsibility of the app to provide the latest location to the SDK. The SDK won't fetch the location on its own, but it will send the location with the requests if the app provided a location (or one is available from using the SDK mode before) and reporting is remotely enabled as well.\nUse updateLocation on the base configuration class to update the location used by the SDK."</string>
+    <string name="geolocation_disabled_option_description">"When location reporting is disabled, the SDK doesn't obtain nor send out the device's location."</string>
+    <string name="geolocation_location_not_available">Location is not available.</string>
+    <string name="caching_options_explanation_text">These options control caching for video ads.</string>
+    <string name="max_nr_of_ads_in_cache">Maximum number of ads:</string>
+    <string name="caching_enabled_check_box_text">Caching enabled</string>
+    <string name="save_caching_options_button_text">Save caching options</string>
+    <string name="location_permission_not_granted">Location permissions not granted by user.</string>
+
+</resources>

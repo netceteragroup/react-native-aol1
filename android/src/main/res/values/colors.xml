@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="ios_gray">#FF555555</color>
+  <color name="transparent_black">#CC000000</color>
+  <color name="full_transparent_color">#00000000</color>
+</resources>

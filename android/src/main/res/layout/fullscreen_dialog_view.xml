@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+IMPORTANT NOTE:
+marginTop, marginLeft, marginRight, marginBottom not working
+use a fake view to simulate margin
+QUESTIONS:
+1. should the link from the caption be clickable?
+android:layout_height="?android:attr/actionBarSize"
+?attr/actionBarSize
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/full_screen_dialog_main_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/full_transparent_color">
+
+    <View
+        android:id="@+id/fake_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+    <com.adtech.mobilesdk.publisher.view.AdtechInterstitialView
+        android:visibility="invisible"
+        android:id="@+id/ad_interstitial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.adtech.mobilesdk.publisher.view.AdtechInterstitialView>
+
+</LinearLayout>
