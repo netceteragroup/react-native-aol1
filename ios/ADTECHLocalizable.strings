@@ -1,0 +1,23 @@
+"OK" = "OK";
+"YES" = "YES";
+"NO" = "NO";
+"Cancel" = "Cancel";
+"Continue" = "Continue";
+"Don't Allow" = "Don't Allow";
+
+"This content is available in online mode only." = "This content is available in online mode only.";
+
+"Application will exit.\nDo you wish to continue?" = "Application will exit.\nDo you wish to continue?";
+
+"Launch AppStore" = "Launch AppStore";
+
+"Do you want to allow the ad to store a picture in your gallery?" = "Do you want to allow the ad to store a picture in your gallery?";
+"Do you want to allow the ad to take a picture with your camera and store it in your gallery?" = "Do you want to allow the ad to take a picture with your camera and store it in your gallery?";
+"Do you want to allow the ad to take a screenshot and store it in your gallery?" = "Do you want to allow the ad to take a screenshot and store it in your gallery?";
+
+"Do you want to call the number: %@?" = "Do you want to call the number: %@?";
+"Do you want a facetime call with: %@?" = "Do you want a facetime call with: %@?";
+
+"$mm:$ss" = "$mm:$ss";
+"of ad $a/$t" = "of ad $a/$t";
+"Debug" = "Debug";
