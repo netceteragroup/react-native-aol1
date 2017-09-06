@@ -25,6 +25,13 @@
 
 @property (nonatomic) ATBannerViewController *bannerVC;
 
+
+
+@property (nonatomic) NSString *alias;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSString *networkid;
+@property (nonatomic) NSString *subnetworkid;
+
 @end
 
 @implementation RNAdtechView
@@ -105,6 +112,12 @@
     */
     
     self.bannerVC = [[ATBannerViewController alloc] init];
+    
+    [self.bannerVC setAlias:self.alias];
+    [self.bannerVC setType:self.type];
+    [self.bannerVC setNetworkid:self.networkid];
+    [self.bannerVC setSubnetworkid:self.subnetworkid];
+    
     self.bannerVC.view.frame = self.bounds;
     self.bannerVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.AdTechView addSubview:self.bannerVC.view];
@@ -117,8 +130,32 @@
     [adtechBanner load];
     */
     
-    
     [self addSubview:self.AdTechView];
 }
+
+
+//properties from JS
+
+- (void)setALIAS:(NSString *)alias {
+    NSLog(@"alias: %@", alias);
+    self.alias = alias;
+}
+
+- (void)setTYPE:(NSString *)type {
+    NSLog(@"type: %@", type);
+    self.type = type;
+}
+
+- (void)setNETWORKID:(NSString *)networkid {
+    NSLog(@"networkid: %@", networkid);
+    self.networkid = networkid;
+}
+
+- (void)setSUBNETWORKID:(NSString *)subnetworkid {
+    NSLog(@"subnetworkid: %@", subnetworkid);
+    self.subnetworkid = subnetworkid;
+}
+
+
 
 @end

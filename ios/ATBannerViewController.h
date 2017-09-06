@@ -11,4 +11,9 @@
 
 @interface ATBannerViewController : UIViewController<ATBannerViewDelegate, ATInterstitialDelegate>
 
+@property (nonatomic) NSString *alias;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSString *networkid;
+@property (nonatomic) NSString *subnetworkid;
+
 @end

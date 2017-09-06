@@ -26,22 +26,36 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    [self setupBannerView];
+    if([[self.type lowercaseString] isEqualToString:@"banner"]){
+        [self setupBannerView];
+    } else if([[self.type lowercaseString] isEqualToString:@"interstitial"]) {
+        [self setupInterstitialView];
+    }
 
+}
+
+- (BOOL) allParametersAreAcomplished {
+    if(self.alias == nil || self.networkid == nil || self.subnetworkid == nil){
+        NSLog(@"\nERROR: you MUST provide alias, networkid and subnetworkid values in order to see the ad!\n");
+        return NO;
+    }
     
-    
-    //[self setupInterstitialView];
-    
+    return YES;
 }
 
 
 - (void) setupBannerView {
+    
+    if(![self allParametersAreAcomplished]){
+        return;
+    }
+    
     ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-    //configuration.alias = @"home-top-5";
-    configuration.alias = @"nzz-app-top-5";
+    
+    configuration.alias = self.alias;
     configuration.domain = @"a.adtech.de";
-    configuration.networkID = 1135;
-    configuration.subNetworkID = 1;
+    configuration.networkID = [self.networkid integerValue];
+    configuration.subNetworkID = [self.subnetworkid integerValue];
     
     self.bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     self.bannerView.configuration = configuration;
@@ -57,6 +71,10 @@
 
 - (void)setupInterstitialView
 {
+    if(![self allParametersAreAcomplished]){
+        return;
+    }
+    
     // create an interstitial
     self.interstitial = [[ATInterstitial alloc] init];
     self.interstitial.delegate = self;
@@ -64,9 +82,17 @@
     
     // configure it
     ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
+    
+    configuration.alias = self.alias;
+    configuration.domain = @"a.adtech.de";
+    configuration.networkID = [self.networkid integerValue];
+    configuration.subNetworkID = [self.subnetworkid integerValue];
+    
+    /*
     configuration.alias = @"interstitial-top-5";
     configuration.networkID = 23;
     configuration.subNetworkID = 4;
+    */
     
     // set image resources for close indicator when it's in DefaulState and PressedState.
     configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"] andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];

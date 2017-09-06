@@ -14,7 +14,13 @@
 @implementation AdtechViewManager
 
 RCT_EXPORT_MODULE();
-//RCT_REMAP_VIEW_PROPERTY(sharingURL, SHARINGURL, NSString);
+
+RCT_REMAP_VIEW_PROPERTY(alias, ALIAS, NSString);
+RCT_REMAP_VIEW_PROPERTY(type, TYPE, NSString);
+RCT_REMAP_VIEW_PROPERTY(networkid, NETWORKID, NSString);
+RCT_REMAP_VIEW_PROPERTY(subnetworkid, SUBNETWORKID, NSString);
+
+
 
 - (UIView *)view
 {
