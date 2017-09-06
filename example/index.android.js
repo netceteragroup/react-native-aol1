@@ -25,9 +25,11 @@ export default class example extends Component {
         </Text>
         <AdtechView
           style={styles.empty_syle}
-          alias={'your_add'}
-          type={'banner'}
-          height={160}
+          alias={'your_alias'}
+          networkid={your_networkid}
+          subnetworkid={your_subnetworkid}
+          type={'banner/interstitial'}
+          height={250}
           />
         <Text style={styles.text}>
            Text Below Banner Add

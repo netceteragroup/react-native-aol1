@@ -30,6 +30,18 @@ public class AdtechViewManager extends
         view.setType(type);
     }
 
+    @ReactProp(name = "networkid")
+    public void setNetworkId(AdtechView view, int networkId) {
+        Log.d(TAG, "setNetworkId");
+        view.setNetworkId(networkId);
+    }
+
+    @ReactProp(name = "subnetworkid")
+    public void setSubnetworkId(AdtechView view, int subnetworkId) {
+        Log.d(TAG, "setSubnetworkId");
+        view.setSubnetworkId(subnetworkId);
+    }
+
     /**
      * to_be_investigated
      * To investigate if this setHeight method can be removed because I think there is already a

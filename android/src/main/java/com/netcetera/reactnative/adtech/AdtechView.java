@@ -55,9 +55,17 @@ class AdtechView extends FrameLayout {
 
     private int countParameter = 0;
 
+    /**
+     * 5 parameters are needed
+     * type,
+     * alias,
+     * networkid,
+     * subnetworkid
+     * height
+     */
     private void checkIfAllParametersWereLoaded(){
         countParameter ++;
-        if(countParameter == 3){
+        if(countParameter == 5){
             loadAlias();
         }
     }
@@ -74,7 +82,23 @@ class AdtechView extends FrameLayout {
 
     public void setType(String type) {
         mType = type;
-        LogUtils.d(TAG, "setType, type = " + type);
+        LogUtils.d(TAG, "setType" + type);
+        checkIfAllParametersWereLoaded();
+    }
+
+    private int mNetworkId;
+
+    public void setNetworkId(int networkId) {
+        mNetworkId = networkId;
+        LogUtils.d(TAG, "setNetworkId " + networkId);
+        checkIfAllParametersWereLoaded();
+    }
+
+    private int mSubnetworkId;
+
+    public void setSubnetworkId(int subnetworkId) {
+        mSubnetworkId = subnetworkId;
+        LogUtils.d(TAG, "setSubnetworkId " + subnetworkId);
         checkIfAllParametersWereLoaded();
     }
 
@@ -113,7 +137,7 @@ class AdtechView extends FrameLayout {
     private void loadAlias() {
         LogUtils.d(TAG, "loadAlias, alias = " + mAlias);
         if(mType.equalsIgnoreCase("banner")){
-            setupBannerAd(mAlias);
+            setupBannerAd();
         } else if(mType.equalsIgnoreCase("interstitial")){
             setupInterstitialAd();
         }
@@ -132,15 +156,15 @@ class AdtechView extends FrameLayout {
         }
     }
 
-    private void setupBannerAd(String alias) {
+    private void setupBannerAd() {
         LogUtils.d(TAG, "setupBannerAd");
         //parameters setup bannerad start
         AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration("SampleApp");
-        //official example configuration is not working
-        adtechAdConfiguration.setAlias("simple_image_2");
         adtechAdConfiguration.setDomain("a.adtech.de");
-        adtechAdConfiguration.setNetworkId(23);
-        adtechAdConfiguration.setSubnetworkId(4);
+        //official example configuration is not working
+        adtechAdConfiguration.setAlias(mAlias);
+        adtechAdConfiguration.setNetworkId(mNetworkId);
+        adtechAdConfiguration.setSubnetworkId(mSubnetworkId);
         //parameters setup bannerad end
         //Mandatory: provide the banner view with the configuration object. This can be replaced at runtime with another
         //configuration object pointing to a different ad-placement.
