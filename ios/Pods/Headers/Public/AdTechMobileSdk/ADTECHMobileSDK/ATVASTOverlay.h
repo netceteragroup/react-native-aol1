@@ -1,0 +1,1 @@
+../../../../../../libraries/ios/ADTECHMobileSDK.framework/Headers/ATVASTOverlay.h

@@ -1,0 +1,26 @@
+{
+  "name": "AdTechMobileSdk",
+  "version": "3.8.4",
+  "summary": "A podspec for AdTechMobileSdk.",
+  "description": "Podspec for easier integration of AdTech SDK",
+  "homepage": "https://github.com/netceteragroup/react-native-aol1",
+  "license": "MIT",
+  "authors": {
+    "Zdravko Nikolovski": "zdravko.nikolovski@netcetera.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "http": "https://learn.oneadserver.aol.com/viewer/book-attachment/huTPsrZDmfWl1q7mMa9osw/ADTECH_SDK_iOS_3.8.4.zip"
+  },
+  "ios": {
+    "vendored_frameworks": "ADTECHMobileSDK.framework"
+  },
+  "public_header_files": "ADTECHMobileSDK.framework/Headers/*.h",
+  "resources": [
+    "ADTECHMobileSDK.bundle",
+    "ADTECHLocalizable.strings",
+    "ADTECHAdConfiguration.plist"
+  ]
+}

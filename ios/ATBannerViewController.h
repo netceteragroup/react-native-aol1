@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <ADTECHMobileSDK/ADTECHMobileSDK.h>
+#import <AdTechMobileSdk/ADTECHMobileSDK.h>
 
 @interface ATBannerViewController : UIViewController<ATBannerViewDelegate, ATInterstitialDelegate>
 
