@@ -1,1 +1,0 @@
-../../../../../../libraries/ios/ADTECHMobileSDK.framework/Headers/ATConfigurationConstants.h

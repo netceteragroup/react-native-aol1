@@ -1,1 +1,0 @@
-../../../../../../libraries/ios/ADTECHMobileSDK.framework/Headers/ATVideoAdOverlay.h

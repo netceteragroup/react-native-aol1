@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { requireNativeComponent } from 'react-native';
-import PropTypes, { string, func } from 'prop-types'
+import PropTypes, { string, func, number } from 'prop-types'
 
 class AdTechView extends Component {
   static propTypes = {
