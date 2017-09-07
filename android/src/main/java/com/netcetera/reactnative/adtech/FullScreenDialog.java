@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+
 import com.adtech.mobilesdk.publisher.ErrorCause;
 import com.adtech.mobilesdk.publisher.configuration.AdtechAdConfiguration;
 import com.adtech.mobilesdk.publisher.view.AdtechInterstitialView;
@@ -25,10 +30,13 @@ public class FullScreenDialog extends AlertDialog {
 
     private String alias;
 
-    protected FullScreenDialog(Context context, String alias) {
+    private String appName;
+
+    protected FullScreenDialog(Context context, String alias, String appName) {
         super(context, R.style.DlgFullTheme);
         LogUtils.d(TAG, "FullScreenDialog");
         this.alias = alias;
+        this.appName = appName;
     }
 
     private String title = "";
@@ -96,7 +104,7 @@ public class FullScreenDialog extends AlertDialog {
     private void setupInterstititalAd(String alias) {
         LogUtils.d(TAG, "setupInterstititalAd");
         //parameters setup interstitalad start
-        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration("SampleApp");
+        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration(appName);
         adtechAdConfiguration.setAlias(alias);
         adtechAdConfiguration.setDomain("a.adtech.de");
         adtechAdConfiguration.setNetworkId(23);
@@ -163,6 +171,4 @@ public class FullScreenDialog extends AlertDialog {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
-
-
 }

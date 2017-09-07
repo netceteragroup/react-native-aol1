@@ -8,7 +8,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-  
+
 
 # Xcode
 #
@@ -29,7 +29,13 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-      
+
+# CocoaPods
+
+ios/Pods
+ios/*.xcworkspace
+example/ios/Pods
+example/ios/*.xcworkspace
 
 # Android/IntelliJ
 #

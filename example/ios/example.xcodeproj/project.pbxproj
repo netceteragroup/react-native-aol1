@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* exampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* exampleTests.m */; };
-		0A603EEF1F44416A00238AFF /* libRNAdtech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603EEE1F4440F700238AFF /* libRNAdtech.a */; };
 		0A603F071F44733500238AFF /* ADTECHMobileSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F061F44733500238AFF /* ADTECHMobileSDK.framework */; };
 		0A603F271F44735D00238AFF /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F261F44735D00238AFF /* AdSupport.framework */; };
 		0A603F291F44737000238AFF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F281F44737000238AFF /* AudioToolbox.framework */; };
@@ -30,16 +29,11 @@
 		0A603F491F4474A700238AFF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F481F4474A700238AFF /* SystemConfiguration.framework */; };
 		0A603F4B1F4474F900238AFF /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F4A1F4474F900238AFF /* libz.1.dylib */; };
 		0A603F4D1F44751100238AFF /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F4C1F44751100238AFF /* libxml2.2.dylib */; };
-		0A603F571F4477D500238AFF /* ADTECHAdConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A603F551F4477D500238AFF /* ADTECHAdConfiguration.plist */; };
-		0A603F581F4477D500238AFF /* ADTECHLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A603F561F4477D500238AFF /* ADTECHLocalizable.strings */; };
-		0A603F5A1F4478A800238AFF /* ADTECHMobileSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A603F591F4478A800238AFF /* ADTECHMobileSDK.framework */; };
-		0AB4B6091F45E065008256D6 /* ADTECHMobileSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0AB4B6081F45E065008256D6 /* ADTECHMobileSDK.bundle */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		18D6A7FB84E5F08E98D7DDA5 /* libPods-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5718A178E5F55611A365112 /* libPods-example.a */; };
-		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		E7F889DA765E622BEBC33183 /* libPods-exampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 411187A5611F47C7EBA6E456 /* libPods-exampleTests.a */; };
 /* End PBXBuildFile section */
 
@@ -51,27 +45,6 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = example;
 		};
-		0A603EED1F4440F700238AFF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0A603EC41F4440F600238AFF /* RNAdtech.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNAdtech;
-		};
-		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTAnimation;
-		};
-		5E9157341DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
-			remoteInfo = "RCTAnimation-tvOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -79,7 +52,6 @@
 		00E356EE1AD99517003FC87E /* exampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* exampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exampleTests.m; sourceTree = "<group>"; };
-		0A603EC41F4440F600238AFF /* RNAdtech.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAdtech.xcodeproj; path = ../../ios/RNAdtech.xcodeproj; sourceTree = "<group>"; };
 		0A603F061F44733500238AFF /* ADTECHMobileSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ADTECHMobileSDK.framework; sourceTree = "<group>"; };
 		0A603F261F44735D00238AFF /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		0A603F281F44737000238AFF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -104,7 +76,6 @@
 		0A603F4E1F4476F000238AFF /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		0A603F551F4477D500238AFF /* ADTECHAdConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ADTECHAdConfiguration.plist; sourceTree = "<group>"; };
 		0A603F561F4477D500238AFF /* ADTECHLocalizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = ADTECHLocalizable.strings; sourceTree = "<group>"; };
-		0A603F591F4478A800238AFF /* ADTECHMobileSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ADTECHMobileSDK.framework; sourceTree = "<group>"; };
 		0AB4B6081F45E065008256D6 /* ADTECHMobileSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ADTECHMobileSDK.bundle; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = example/AppDelegate.h; sourceTree = "<group>"; };
@@ -115,7 +86,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = example/main.m; sourceTree = "<group>"; };
 		411187A5611F47C7EBA6E456 /* libPods-exampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-exampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DF3CAB1CF10EE308DCC80F4 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
-		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		A6E11B8D3E46EF7A05EBE191 /* Pods-exampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-exampleTests/Pods-exampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D39FCD070FE5E81B24D3E070 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Pods/Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 		E53BA0D8505F7F09A3CDF424 /* Pods-exampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-exampleTests/Pods-exampleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,9 +126,6 @@
 				0A603F291F44737000238AFF /* AudioToolbox.framework in Frameworks */,
 				0A603F271F44735D00238AFF /* AdSupport.framework in Frameworks */,
 				0A603F071F44733500238AFF /* ADTECHMobileSDK.framework in Frameworks */,
-				0A603EEF1F44416A00238AFF /* libRNAdtech.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
-				0A603F5A1F4478A800238AFF /* ADTECHMobileSDK.framework in Frameworks */,
 				18D6A7FB84E5F08E98D7DDA5 /* libPods-example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,14 +148,6 @@
 				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0A603EC51F4440F600238AFF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0A603EEE1F4440F700238AFF /* libRNAdtech.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		0A603F051F44733500238AFF /* Frameworks */ = {
@@ -249,20 +208,9 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */,
-				5E9157351DD0AC6500FF2AA8 /* libRCTAnimation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0A603EC41F4440F600238AFF /* RNAdtech.xcodeproj */,
-				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -270,7 +218,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				0A603F591F4478A800238AFF /* ADTECHMobileSDK.framework */,
 				0A603F4E1F4476F000238AFF /* PrefixHeader.pch */,
 				13B07FAE1A68108700A75B9A /* example */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -363,16 +310,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 5E91572E1DD0AC6500FF2AA8 /* Products */;
-					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
-				},
-				{
-					ProductGroup = 0A603EC51F4440F600238AFF /* Products */;
-					ProjectRef = 0A603EC41F4440F600238AFF /* RNAdtech.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* example */,
@@ -380,30 +317,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0A603EEE1F4440F700238AFF /* libRNAdtech.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNAdtech.a;
-			remoteRef = 0A603EED1F4440F700238AFF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTAnimation.a;
-			remoteRef = 5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5E9157351DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTAnimation.a;
-			remoteRef = 5E9157341DD0AC6500FF2AA8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -417,9 +330,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A603F581F4477D500238AFF /* ADTECHLocalizable.strings in Resources */,
-				0A603F571F4477D500238AFF /* ADTECHAdConfiguration.plist in Resources */,
-				0AB4B6091F45E065008256D6 /* ADTECHMobileSDK.bundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -529,9 +439,14 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-example/Pods-example-resources.sh",
+				"${PODS_ROOT}/../../../libraries/ios/ADTECHMobileSDK.bundle",
+				"${PODS_ROOT}/../../../libraries/ios/ADTECHLocalizable.strings",
+				"${PODS_ROOT}/../../../libraries/ios/ADTECHAdConfiguration.plist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

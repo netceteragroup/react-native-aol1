@@ -7,6 +7,11 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+
 import com.adtech.mobilesdk.publisher.ErrorCause;
 import com.adtech.mobilesdk.publisher.configuration.AdtechAdConfiguration;
 import com.adtech.mobilesdk.publisher.view.AdtechBannerView;
@@ -32,13 +37,15 @@ class AdtechView extends FrameLayout {
     private ProgressBar loadingProgressBar;
     private int reactTag;
     private ReactActivity activity;
+    private String appName;
 
-    public AdtechView(Context context, ReactActivity activity) {
+    public AdtechView(Context context, ReactActivity activity, String appName) {
         super(context);
         this.activity = activity;
         instancesCounter++;
         LogUtils.d(TAG, "AdtechView(Context context) " + instancesCounter);
         initContent();
+        this.appName = appName;
 
         adtechBannerView = (AdtechBannerView) findViewById(R.id.ad_banner);
 
@@ -55,9 +62,17 @@ class AdtechView extends FrameLayout {
 
     private int countParameter = 0;
 
+    /**
+     * 5 parameters are needed
+     * type,
+     * alias,
+     * networkid,
+     * subnetworkid
+     * height
+     */
     private void checkIfAllParametersWereLoaded(){
         countParameter ++;
-        if(countParameter == 3){
+        if(countParameter == 5){
             loadAlias();
         }
     }
@@ -74,7 +89,23 @@ class AdtechView extends FrameLayout {
 
     public void setType(String type) {
         mType = type;
-        LogUtils.d(TAG, "setType, type = " + type);
+        LogUtils.d(TAG, "setType" + type);
+        checkIfAllParametersWereLoaded();
+    }
+
+    private int mNetworkId;
+
+    public void setNetworkId(int networkId) {
+        mNetworkId = networkId;
+        LogUtils.d(TAG, "setNetworkId " + networkId);
+        checkIfAllParametersWereLoaded();
+    }
+
+    private int mSubnetworkId;
+
+    public void setSubnetworkId(int subnetworkId) {
+        mSubnetworkId = subnetworkId;
+        LogUtils.d(TAG, "setSubnetworkId " + subnetworkId);
         checkIfAllParametersWereLoaded();
     }
 
@@ -113,7 +144,7 @@ class AdtechView extends FrameLayout {
     private void loadAlias() {
         LogUtils.d(TAG, "loadAlias, alias = " + mAlias);
         if(mType.equalsIgnoreCase("banner")){
-            setupBannerAd(mAlias);
+            setupBannerAd();
         } else if(mType.equalsIgnoreCase("interstitial")){
             setupInterstitialAd();
         }
@@ -125,22 +156,23 @@ class AdtechView extends FrameLayout {
 
     private void setupInterstitialAd(){
         if(dialog == null){
-            dialog = new FullScreenDialog(getContext(), mAlias);
+            dialog = new FullScreenDialog(getContext(), mAlias, appName);
         }
         if (false == dialog.isShowing()) {
             dialog.show();
         }
     }
 
-    private void setupBannerAd(String alias) {
+    private void setupBannerAd() {
         LogUtils.d(TAG, "setupBannerAd");
         //parameters setup bannerad start
-        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration("SampleApp");
-        //official example configuration is not working
-        adtechAdConfiguration.setAlias("simple_image_2");
+        AdtechAdConfiguration conf = new AdtechAdConfiguration(appName);
+        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration(appName);
         adtechAdConfiguration.setDomain("a.adtech.de");
-        adtechAdConfiguration.setNetworkId(23);
-        adtechAdConfiguration.setSubnetworkId(4);
+        //official example configuration is not working
+        adtechAdConfiguration.setAlias(mAlias);
+        adtechAdConfiguration.setNetworkId(mNetworkId);
+        adtechAdConfiguration.setSubnetworkId(mSubnetworkId);
         //parameters setup bannerad end
         //Mandatory: provide the banner view with the configuration object. This can be replaced at runtime with another
         //configuration object pointing to a different ad-placement.
@@ -162,6 +194,8 @@ class AdtechView extends FrameLayout {
                     public void onAdSuccess() {
                         // This method is called when an ad was downloaded successfully.
                         LogUtils.d(TAG, "onAdSuccess");
+
+                        triggerAnEvent("onAdFetchSuccess");
                     }
 
                     @Override
@@ -182,6 +216,8 @@ class AdtechView extends FrameLayout {
                         // This method is called when an ad download failed. This could happen because of networking reasons or other
                         // server communication reasons.
                         LogUtils.d(TAG, "onAdFailure");
+
+                        triggerAnEvent("onAdFetchFail");
                     }
 
                     @Override
@@ -207,6 +243,8 @@ class AdtechView extends FrameLayout {
                     public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
                         // This method is called when an ad could not be fetched, but signal codes were provided by server.
                         LogUtils.d(TAG, "onAdSuccess");
+
+                        triggerAnEvent("onAdFetchFail");
                     }
 
                     @Override
@@ -215,6 +253,8 @@ class AdtechView extends FrameLayout {
                         LogUtils.d(TAG, "onAdSuccessWithSignal " + instancesCounter);
                         setAdtechView();
                         isLoaded = true;
+
+                        triggerAnEvent("onAdFetchSuccess");
                     }
                 });
         adtechBannerView.load();
@@ -249,5 +289,15 @@ class AdtechView extends FrameLayout {
             adtechBannerView.requestLayout();
         }
     };
+
+    private final void triggerAnEvent(String eventName) {
+        WritableMap evt = Arguments.createMap();
+
+        ReactContext ctx = (ReactContext) getContext();
+        ctx.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                eventName,
+                evt);
+    }
     //refresh end
 }

@@ -10,7 +10,7 @@ import {
   ScrollView
 } from 'react-native';
 
-import { AdtechView } from './AdtechViewKit';
+import { AdTechView } from 'react-native-adtech';
 
 const screenWidth = Dimensions.get('window').width
 const screenHeight = 0.9*screenWidth
@@ -23,18 +23,23 @@ export default class example extends Component {
         <Text style={styles.text}>
            Text Above Banner Add
         </Text>
-        <AdtechView
+        <AdTechView
           style={styles.empty_syle}
-          alias={'your_add'}
+          alias={'home-top-5'}
+          networkId={23}
+          subnetworkId={4}
           type={'banner'}
-          height={160}
+          height={250}
+          onAdFetchSuccess={() => console.log('New ad fetched')}
           />
         <Text style={styles.text}>
            Text Below Banner Add
         </Text>
-        <AdtechView
+        <AdTechView
           style={styles.empty_syle}
           alias={'interstitial-top-5'}
+          networkId={23}
+          subnetworkId={4}
           type={'interstitial'}
           height={0}/>
       </ScrollView>

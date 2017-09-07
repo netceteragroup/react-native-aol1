@@ -9,6 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <AdTechMobileSdk/ADTECHMobileSDK.h>
 
-@interface ATBannerViewController : UIViewController<ATBannerViewDelegate, ATInterstitialDelegate>
+@interface ATBannerViewController : UIViewController
+
+@property (weak, nonatomic) id<ATBannerViewDelegate> bannerDelegate;
+@property (weak, nonatomic) id<ATInterstitialDelegate> interstitialDelegate;
+
+@property (nonatomic) NSString *alias;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSString *networkid;
+@property (nonatomic) NSString *subnetworkid;
+
+- (void)setupController;
 
 @end

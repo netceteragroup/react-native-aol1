@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/netceteragroup/react-native-aol1"
   s.license      = "MIT"
 
-  s.author             = { "Zdravko Nikolovski" => "zdravko.nikolovski@netcetera.com" }
+  s.author       = { "Zdravko Nikolovski" => "zdravko.nikolovski@netcetera.com" }
 
   s.platform     = :ios, "8.0"
 
@@ -29,28 +29,8 @@ Pod::Spec.new do |s|
   s.public_header_files = "ADTECHMobileSDK.framework/Headers/*.h"
 
   s.resources = 'ADTECHMobileSDK.bundle', 'ADTECHLocalizable.strings', 'ADTECHAdConfiguration.plist'
-  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Link your library with frameworks, or libraries. Libraries do not include
-  #  the lib prefix of their name.
-  #
 
-  # s.framework  = "SomeFramework"
-  # s.frameworks = "SomeFramework", "AnotherFramework"
-
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
-
-
-  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs
-  #  you can include multiple dependencies to ensure it works.
-
-  # s.requires_arc = true
-
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "JSONKit", "~> 1.4"
+  s.frameworks = "AdSupport", "AudioToolbox", "AVFoundation", "CFNetwork", "CoreData", "CoreGraphics", "CoreLocation", "CoreMedia", "CoreMotion", "CoreVideo", "EventKit", "EventKitUI", "MediaPlayer", "MessageUI", "MobileCoreServices", "QuartzCore", "SafariServices", "Security", "StoreKit", "SystemConfiguration"
+  s.libraries = "z", "xml2"
 
 end

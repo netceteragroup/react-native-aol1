@@ -83,6 +83,16 @@ EOM
       ;;
   esac
 }
+if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHMobileSDK.bundle"
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHLocalizable.strings"
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHAdConfiguration.plist"
+fi
+if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHMobileSDK.bundle"
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHLocalizable.strings"
+  install_resource "${PODS_ROOT}/../../../libraries/ios/ADTECHAdConfiguration.plist"
+fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

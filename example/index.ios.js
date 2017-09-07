@@ -12,23 +12,36 @@ import {
   View
 } from 'react-native';
 
-export default class example extends Component {
+import { AdTechView } from 'react-native-adtech';
 
+export default class example extends Component {
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native AdTech example!
+          Welcome to AdTech React Native Example!
         </Text>
         <Text style={styles.instructions}>
-          This is a tweet without picture
+          To get started, edit index.ios.js
         </Text>
         <Text style={styles.instructions}>
-          And this one is a tweet with a picture
+          Press Cmd+R to reload,{'\n'}
+          Cmd+D or shake for dev menu
         </Text>
-        <Text style={styles.instructions}>
-          You can tap on the tweet views in order to interract with them.
-        </Text>
+        <AdTechView
+        	style={styles.adtech}
+        	alias={"home-top-5"}
+        	type={"banner"}
+        	networkId={23}
+        	subnetworkId={4}
+          onAdFetchSuccess={() => console.log('New ad fetched')}
+        />
+        <AdTechView
+          alias={'interstitial-top-5'}
+          networkId={23}
+          subnetworkId={4}
+          type={'interstitial'}
+          height={0}/>
       </View>
     );
   }
@@ -42,16 +55,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   welcome: {
-    fontSize: 15,
+    fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },
   instructions: {
-  	fontSize: 10,
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  }
+  },
+  adtech: {
+    flex: 0,
+    width: 380,
+    height: 160,
+  },
 });
 
 AppRegistry.registerComponent('example', () => example);

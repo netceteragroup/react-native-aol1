@@ -1,6 +1,6 @@
 rootProject.name = 'example'
 
 include ':app'
-include ':react-native-adtechkit'
-project(':react-native-adtechkit').projectDir = new File(rootProject.projectDir, '../../android')
+include ':react-native-adtech'
+project(':react-native-adtech').projectDir = new File(rootProject.projectDir, '../../android')
 include ':adtechmobilesdk'

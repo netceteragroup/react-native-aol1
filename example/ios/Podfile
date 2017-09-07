@@ -21,6 +21,9 @@ target 'example' do
     'RCTWebSocket'
   ]
 
+  pod 'ReactNativeAdTech', :path => '../..'
+  pod 'AdTechMobileSdk', :path => '../../libraries/ios'
+
   target 'exampleTests' do
     inherit! :search_paths
   end

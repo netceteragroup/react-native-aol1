@@ -10,20 +10,9 @@
 #import "ATBannerViewController.h"
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
 
-@interface RNAdtechView()
-
-//module position and size
-@property (nonatomic) CGPoint windowPos;
-@property (nonatomic) CGSize windowSize;
-
-//yoga frame info done timer
-@property (nonatomic) NSTimer *frameInfoTimer;
-
-@property (nonatomic) UIView *AdTechView;
-
-@property (nonatomic) ATBannerView *bannerView;
-
-@property (nonatomic) ATBannerViewController *bannerVC;
+@interface RNAdtechView() {
+    ATBannerViewController *bannerVC;
+}
 
 @end
 
@@ -33,84 +22,116 @@
 {
     self = [super init];
     
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self createAdTechView];
     
-    [self createFrameInfoTimer];
     return self;
 }
 
-//timer for yoga notifications
-- (void)createFrameInfoTimer {
-    self.frameInfoTimer = [NSTimer scheduledTimerWithTimeInterval:.01f
-                                                           target:self
-                                                         selector:@selector(checkFrameInfoDone:)
-                                                         userInfo:nil
-                                                          repeats:YES];
+- (void)createAdTechView
+{
+    bannerVC = [[ATBannerViewController alloc] init];
+
+    bannerVC.alias = self.alias;
+    bannerVC.type = self.type;
+    bannerVC.networkid = self.networkId;
+    bannerVC.subnetworkid = self.subnetworkId;
+
+    bannerVC.bannerDelegate = self;
+    bannerVC.interstitialDelegate = self;
+
+    [self addSubview:bannerVC.view];
+
+    [bannerVC.view.topAnchor constraintEqualToAnchor:self.topAnchor].active = YES;
+    [bannerVC.view.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
+    [bannerVC.view.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
+    [bannerVC.view.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
 }
 
+#pragma mark - Properties from JS
 
--(void)checkFrameInfoDone:(NSTimer*)timer {
-    
-    if(self.frame.size.width > 0 && self.frame.size.height > 0){
-        if([self.frameInfoTimer isValid]){
-            [self.frameInfoTimer invalidate];
-            NSLog(@"X = %f  Y = %f  W = %f  H = %f", self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
-            self.windowPos = CGPointMake(self.frame.origin.x, self.frame.origin.y);
-            self.windowSize = CGSizeMake(self.frame.size.width, self.frame.size.height);
-            [self adjustViewsLayout];
-        }
+- (void)didSetProps:(NSArray<NSString *> *)changedProps
+{
+    if ([changedProps containsObject:@"alias"] ||
+        [changedProps containsObject:@"type"] ||
+        [changedProps containsObject:@"networkId"] ||
+        [changedProps containsObject:@"subnetworkId"]) {
+
+        bannerVC.alias = self.alias;
+        bannerVC.type = self.type;
+        bannerVC.networkid = self.networkId;
+        bannerVC.subnetworkid = self.subnetworkId;
+
+        [bannerVC setupController];
     }
 }
 
+#pragma mark - ATBannerViewDelegate
 
+- (void)shouldSuspendForAd:(ATBannerView*)view
+{
+    // if needed, suspend the activity of the host application
+}
 
-- (void)adjustViewsLayout {
-    /*
-    if(self.imageLinksArray.count > 0){
-        self.imageGalleryView = [[UIView alloc] initWithFrame:self.bounds];
-        self.imageGalleryView.backgroundColor = [UIColor blackColor];
-        self.imageGalleryView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
-        self.scrollViewScreenWidth = self.frame.size.width - (2*IMAGE_GALLERY_NAVIGATION_BARS_W);
-        
-        [self loadImages];
-        [self createScrollView];
-        [self createImageGalleryNavigationControls];
-        [self addSubview:self.imageGalleryView];
-    }*/
-    
-    self.AdTechView = [[UIView alloc] initWithFrame:self.bounds];
-    self.AdTechView.backgroundColor = [UIColor greenColor];
-    self.AdTechView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    /*
-    self.bannerView = [[ATBannerView alloc] initWithFrame:self.AdTechView.frame];
-    
-    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-    configuration.alias = @"home-top-5";
-    
-    self.bannerView.configuration = configuration;
-    
-    //self.bannerView.delegate = self;
-    [self.bannerView load];
-    [self.AdTechView addSubview:self.bannerView];
-    */
-    
-    self.bannerVC = [[ATBannerViewController alloc] init];
-    self.bannerVC.view.frame = self.bounds;
-    self.bannerVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.AdTechView addSubview:self.bannerVC.view];
+- (void)shouldResumeForAd:(ATBannerView*)view
+{
+    // resume the activity of the host application
+}
 
-    
-    /*
-    adtechBanner = [[ATBannerView alloc] initWithFrame:CGRectMake(0,0,320,50)]; adtechBanner.configuration.alias = @"home-top-5"; adtechBanner.viewController = self;
-    adtechBanner.delegate = self;
-    // add the banner as a subview of your view controllers view [self.view addSubview:adtechBanner];
-    [adtechBanner load];
-    */
-    
-    
-    [self addSubview:self.AdTechView];
+- (void)willLeaveApplicationForAd:(ATBannerView*)view
+{
+    // the ad triggered the app to enter background (e.g. the user clicked a URL in the ad)
+    // you should save your apps state at this point
+}
+- (void)didFetchNextAd:(ATBannerView*)view signals:(NSArray *)signals
+{
+    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
+    if (self.onAdFetchSuccess) {
+        self.onAdFetchSuccess(@{});
+    }
+}
+- (void)didFailFetchingAd:(ATBannerView*)view signals:(NSArray *)signals error:(NSError *)error
+{
+    // An ad failed to load. The banner will try to fetch another one after a waiting period.
+    if (self.onAdFetchFail) {
+        self.onAdFetchFail(@{});
+    }
+}
+
+#pragma mark - ATInterstitialDelegate
+
+- (void)didHideInterstitialAd:(ATInterstitial*)ad
+{
+    //User dismissed the ad or refresh timer was fired.
+    //You should take down the interstitial ad from the screen at this time.
+    if (self.onInterstitialHidden) {
+        self.onInterstitialHidden(@{});
+    }
+}
+
+- (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals
+{
+    //Ad has been fetched successfully and is ready for display.
+    //You should put up the ad on the screen at this time.
+    [ad present];
+}
+
+- (void)didFailFetchingInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals
+{
+    //Ad failed fetching.
+    //You can call load to try again, if you think the conditions leading to the error have changed.
+}
+
+- (void)willLeaveApplicationForInterstitialAd:(ATInterstitial*)ad
+{
+    //User interaction triggers leaving the application such as opening an app store link.
+    //You should save the state of the application when you get this call.
+}
+
+- (BOOL)shouldOpenLandingPageForAd:(ATInterstitial*)ad withURL:(NSURL*)URL useBrowser:(ATBrowserViewController *__autoreleasing *)browserViewController
+{
+    //The ad will try to show the landing page.
+    //You can use a custom implementation for opening a landing page here.
+    return YES;
 }
 
 @end
