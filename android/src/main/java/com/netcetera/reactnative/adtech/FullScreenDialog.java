@@ -29,14 +29,17 @@ public class FullScreenDialog extends AlertDialog {
     private AdtechInterstitialView adtechInterstitialView;
 
     private String alias;
-
     private String appName;
+    private int networkId;
+    private int subnetworkId;
 
-    protected FullScreenDialog(Context context, String alias, String appName) {
+    protected FullScreenDialog(Context context, String alias, String appName, int networkId, int subnetworkId) {
         super(context, R.style.DlgFullTheme);
         LogUtils.d(TAG, "FullScreenDialog");
         this.alias = alias;
         this.appName = appName;
+        this.networkId = networkId;
+        this.subnetworkId = subnetworkId;
     }
 
     private String title = "";
@@ -45,13 +48,20 @@ public class FullScreenDialog extends AlertDialog {
         this.title = title;
     }
 
+    public void showInterstitial()
+    {
+        LogUtils.d(TAG, "show");
+        show();
+
+        setupInterstititalAd();
+
+        hide();
+    }
+
     @Override
     public void show() {
         super.show();
-        LogUtils.d(TAG, "show");
-        setupInterstititalAd(alias);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +111,14 @@ public class FullScreenDialog extends AlertDialog {
         adtechInterstitialView = (AdtechInterstitialView) findViewById(R.id.ad_interstitial);
     }
 
-    private void setupInterstititalAd(String alias) {
+    private void setupInterstititalAd() {
         LogUtils.d(TAG, "setupInterstititalAd");
         //parameters setup interstitalad start
         AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration(appName);
-        adtechAdConfiguration.setAlias(alias);
+        adtechAdConfiguration.setAlias(this.alias);
         adtechAdConfiguration.setDomain("a.adtech.de");
-        adtechAdConfiguration.setNetworkId(23);
-        adtechAdConfiguration.setSubnetworkId(4);
+        adtechAdConfiguration.setNetworkId(networkId);
+        adtechAdConfiguration.setSubnetworkId(subnetworkId);
         //parameters setup interstitalad end
         adtechInterstitialView.setAdConfiguration(adtechAdConfiguration);
         adtechInterstitialView.setViewCallback(new AdtechInterstitialViewCallback() {
@@ -123,17 +133,28 @@ public class FullScreenDialog extends AlertDialog {
                 super.onAdDismiss();
                 LogUtils.d(TAG, "onAdDismiss");
                 onBackPressed();
+
+                hide();
             }
 
             @Override
             public void onAdSuccess() {
                 super.onAdSuccess();
+
+                show();
+
                 LogUtils.d(TAG, "onAdSuccess");
+                adtechInterstitialView.setVisibility(View.VISIBLE);
+                adtechInterstitialView.bringToFront();
+                adtechInterstitialView.requestLayout();
             }
 
             @Override
             public void onAdSuccessWithSignal(int... signals) {
                 super.onAdSuccessWithSignal(signals);
+
+                show();
+
                 //LogUtils.d(TAG, "onAdSuccessWithSignal " + instancesCounter);
                 adtechInterstitialView.setVisibility(View.VISIBLE);
                 adtechInterstitialView.bringToFront();

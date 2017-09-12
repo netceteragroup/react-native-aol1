@@ -60,8 +60,6 @@ class AdtechView extends FrameLayout {
         setLoadingView();
     }
 
-    private int countParameter = 0;
-
     /**
      * 5 parameters are needed
      * type,
@@ -71,8 +69,8 @@ class AdtechView extends FrameLayout {
      * height
      */
     private void checkIfAllParametersWereLoaded(){
-        countParameter ++;
-        if(countParameter == 5){
+        if (mAlias != null && mType != null && mNetworkId > 0 && mSubnetworkId > 0)
+        {
             loadAlias();
         }
     }
@@ -156,10 +154,10 @@ class AdtechView extends FrameLayout {
 
     private void setupInterstitialAd(){
         if(dialog == null){
-            dialog = new FullScreenDialog(getContext(), mAlias, appName);
+            dialog = new FullScreenDialog(getContext(), mAlias, appName, mNetworkId, mSubnetworkId);
         }
-        if (false == dialog.isShowing()) {
-            dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.showInterstitial();
         }
     }
 
