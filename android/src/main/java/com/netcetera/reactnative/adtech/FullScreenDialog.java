@@ -59,11 +59,6 @@ public class FullScreenDialog extends AlertDialog {
     }
 
     @Override
-    public void show() {
-        super.show();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.d(TAG, "onCreate");
@@ -132,7 +127,7 @@ public class FullScreenDialog extends AlertDialog {
             public void onAdDismiss() {
                 super.onAdDismiss();
                 LogUtils.d(TAG, "onAdDismiss");
-                onBackPressed();
+                //onBackPressed();
 
                 hide();
             }
@@ -166,12 +161,16 @@ public class FullScreenDialog extends AlertDialog {
             public void onAdFailure(ErrorCause cause) {
                 super.onAdFailure(cause);
                 LogUtils.d(TAG, "onAdFailure");
+
+                hide();
             }
 
             @Override
             public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
                 super.onAdFailureWithSignal(cause, signals);
                 LogUtils.d(TAG, "onAdFailureWithSignal");
+
+                hide();
             }
 
             @Override
