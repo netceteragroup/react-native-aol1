@@ -55,7 +55,8 @@
     configuration.domain = @"a.adtech.de";
     configuration.networkID = [self.networkid integerValue];
     configuration.subNetworkID = [self.subnetworkid integerValue];
-    
+    configuration.openLandingPagesThroughBrowser = NO;
+
     bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     bannerView.configuration = configuration;
     bannerView.viewController = self;
@@ -84,6 +85,7 @@
     configuration.domain = @"a.adtech.de";
     configuration.networkID = [self.networkid integerValue];
     configuration.subNetworkID = [self.subnetworkid integerValue];
+    configuration.openLandingPagesThroughBrowser = NO;
     
     /*
     configuration.alias = @"interstitial-top-5";

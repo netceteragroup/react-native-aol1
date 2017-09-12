@@ -16,8 +16,8 @@
 
 @property (nonatomic) NSString *alias;
 @property (nonatomic) NSString *type;
-@property (nonatomic) NSString *networkid;
-@property (nonatomic) NSString *subnetworkid;
+@property (nonatomic) NSNumber *networkid;
+@property (nonatomic) NSNumber *subnetworkid;
 
 - (void)setupController;
 
