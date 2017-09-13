@@ -89,7 +89,32 @@
         self.onAdFetchSuccess(@{});
     }
 }
+
+- (void)didFetchNextAd:(ATBannerView *)view
+{
+    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
+    if (self.onAdFetchSuccess) {
+        self.onAdFetchSuccess(@{});
+    }
+}
+
 - (void)didFailFetchingAd:(ATBannerView*)view signals:(NSArray *)signals error:(NSError *)error
+{
+    // An ad failed to load. The banner will try to fetch another one after a waiting period.
+    if (self.onAdFetchFail) {
+        self.onAdFetchFail(@{});
+    }
+}
+
+- (void)didFailFetchingAd:(ATBannerView *)view
+{
+    // An ad failed to load. The banner will try to fetch another one after a waiting period.
+    if (self.onAdFetchFail) {
+        self.onAdFetchFail(@{});
+    }
+}
+
+- (void)didFailFetchingAd:(ATBannerView *)view signals:(NSArray *)signals
 {
     // An ad failed to load. The banner will try to fetch another one after a waiting period.
     if (self.onAdFetchFail) {
@@ -109,6 +134,13 @@
 }
 
 - (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals
+{
+    //Ad has been fetched successfully and is ready for display.
+    //You should put up the ad on the screen at this time.
+    [ad present];
+}
+
+- (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial *)ad
 {
     //Ad has been fetched successfully and is ready for display.
     //You should put up the ad on the screen at this time.

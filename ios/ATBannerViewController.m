@@ -52,16 +52,14 @@
     ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
     
     configuration.alias = self.alias;
-    configuration.domain = @"a.adtech.de";
-    configuration.networkID = [self.networkid integerValue];
-    configuration.subNetworkID = [self.subnetworkid integerValue];
-    configuration.openLandingPagesThroughBrowser = NO;
-
+    configuration.networkID = self.networkid.unsignedIntegerValue;
+    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
+    
     bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     bannerView.configuration = configuration;
     bannerView.viewController = self;
     bannerView.delegate = self.bannerDelegate;
-    
+
     [self.view addSubview:bannerView];
     
     [bannerView load];
@@ -80,13 +78,11 @@
     
     // configure it
     ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-    
+
     configuration.alias = self.alias;
-    configuration.domain = @"a.adtech.de";
-    configuration.networkID = [self.networkid integerValue];
-    configuration.subNetworkID = [self.subnetworkid integerValue];
-    configuration.openLandingPagesThroughBrowser = NO;
-    
+    configuration.networkID = self.networkid.unsignedIntegerValue;
+    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
+
     /*
     configuration.alias = @"interstitial-top-5";
     configuration.networkID = 23;
@@ -94,7 +90,8 @@
     */
     
     // set image resources for close indicator when it's in DefaulState and PressedState.
-    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"] andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];
+    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"]
+                                                               andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];
     
     interstitial.configuration = configuration;
     
