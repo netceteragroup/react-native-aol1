@@ -24,7 +24,7 @@
         RCTLogError(@"You MUST provide: 'type', 'alias', 'networkId' and 'subnetworkId' parameters in order to see an ad!");
         return NO;
     }
-    
+
     return YES;
 }
 
@@ -47,15 +47,19 @@
         [bannerView removeFromSuperview];
     }
 
-    ATAdtechAdConfiguration *configuration = [self adConfiguration];
+    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
+
+    configuration.alias = self.alias;
+    configuration.networkID = self.networkid.unsignedIntegerValue;
+    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
 
     bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     bannerView.configuration = configuration;
     bannerView.viewController = self;
     bannerView.delegate = self.bannerDelegate;
-    
+
     [self.view addSubview:bannerView];
-    
+
     [bannerView load];
 }
 
@@ -65,20 +69,26 @@
     interstitial = [[ATInterstitial alloc] init];
     interstitial.delegate = self.interstitialDelegate;
     interstitial.viewController = self;
-    
-    // configure it
-    ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
-    UIImage *normalStateImage = [UIImage imageNamed:@"close_box_red.png"];
-    UIImage *highlightedStateImage = [UIImage imageNamed:@"close_box_black.png"];
+    // configure it
+    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
+
+    configuration.alias = self.alias;
+    configuration.networkID = self.networkid.unsignedIntegerValue;
+    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
+
+    /*
+    configuration.alias = @"interstitial-top-5";
+    configuration.networkID = 23;
+    configuration.subNetworkID = 4;
+    */
 
     // set image resources for close indicator when it's in DefaulState and PressedState.
-    configuration.closeIndicator =
-                    [ATCloseIndicator closeIndicatorWithNormalStateImage:normalStateImage
-                                                andHighlightedStateImage:highlightedStateImage];
-    
+    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"]
+                                                               andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];
+
     interstitial.configuration = configuration;
-    
+
     [interstitial load];
 }
 
