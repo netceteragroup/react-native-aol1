@@ -47,11 +47,7 @@
         [bannerView removeFromSuperview];
     }
 
-    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-
-    configuration.alias = self.alias;
-    configuration.networkID = self.networkid.unsignedIntegerValue;
-    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
+    ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
     bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     bannerView.configuration = configuration;
@@ -65,27 +61,17 @@
 
 - (void)setupInterstitialView
 {
-    // create an interstitial
     interstitial = [[ATInterstitial alloc] init];
     interstitial.delegate = self.interstitialDelegate;
     interstitial.viewController = self;
 
-    // configure it
-    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
+    ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
-    configuration.alias = self.alias;
-    configuration.networkID = self.networkid.unsignedIntegerValue;
-    configuration.subNetworkID = self.subnetworkid.unsignedIntegerValue;
+    UIImage *normalStateImage = [UIImage imageNamed:@"close_box_red.png"];
+    UIImage *highlightedStateImage = [UIImage imageNamed:@"close_box_black.png"];
 
-    /*
-    configuration.alias = @"interstitial-top-5";
-    configuration.networkID = 23;
-    configuration.subNetworkID = 4;
-    */
-
-    // set image resources for close indicator when it's in DefaulState and PressedState.
-    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"]
-                                                               andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];
+    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:normalStateImage
+                                                               andHighlightedStateImage:highlightedStateImage];
 
     interstitial.configuration = configuration;
 
