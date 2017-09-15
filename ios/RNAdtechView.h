@@ -1,11 +1,3 @@
-//
-//  RNAdtechView.h
-//  RNAdtech
-//
-//  Created by Andi Anton on 16/08/2017.
-//  Copyright © 2017 Facebook. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <React/RCTView.h>
@@ -21,6 +13,7 @@
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSNumber *networkId;
 @property (nonatomic) NSNumber *subnetworkId;
+@property (nonatomic) NSDictionary *keyValues;
 
 @property (nonatomic, copy) RCTDirectEventBlock onAdFetchSuccess;
 @property (nonatomic, copy) RCTDirectEventBlock onAdFetchFail;

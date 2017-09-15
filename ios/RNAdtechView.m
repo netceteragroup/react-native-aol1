@@ -1,11 +1,3 @@
-//
-//  RNAdtechView.m
-//  RNAdtech
-//
-//  Created by Andi Anton on 16/08/2017.
-//  Copyright © 2017 Facebook. All rights reserved.
-//
-
 #import "RNAdtechView.h"
 #import "ATBannerViewController.h"
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
@@ -33,8 +25,9 @@
 
     bannerVC.alias = self.alias;
     bannerVC.type = self.type;
-    bannerVC.networkid = self.networkId;
-    bannerVC.subnetworkid = self.subnetworkId;
+    bannerVC.networkId = self.networkId;
+    bannerVC.subnetworkId = self.subnetworkId;
+    bannerVC.keyValues = self.keyValues;
 
     bannerVC.bannerDelegate = self;
     bannerVC.interstitialDelegate = self;
@@ -58,8 +51,9 @@
 
         bannerVC.alias = self.alias;
         bannerVC.type = self.type;
-        bannerVC.networkid = self.networkId;
-        bannerVC.subnetworkid = self.subnetworkId;
+        bannerVC.networkId = self.networkId;
+        bannerVC.subnetworkId = self.subnetworkId;
+        bannerVC.keyValues = self.keyValues;
 
         [bannerVC setupController];
     }
@@ -106,6 +100,13 @@
     if (self.onInterstitialHidden) {
         self.onInterstitialHidden(@{});
     }
+}
+
+- (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial *)ad
+{
+    //Ad has been fetched successfully and is ready for display.
+    //You should put up the ad on the screen at this time.
+    [ad present];
 }
 
 - (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals

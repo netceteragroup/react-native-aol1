@@ -1,11 +1,3 @@
-//
-//  ATBannerViewController.h
-//  RNAdtech
-//
-//  Created by Andi Anton on 21/08/2017.
-//  Copyright © 2017 Facebook. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 #import <AdTechMobileSdk/ADTECHMobileSDK.h>
 
@@ -16,8 +8,9 @@
 
 @property (nonatomic) NSString *alias;
 @property (nonatomic) NSString *type;
-@property (nonatomic) NSNumber *networkid;
-@property (nonatomic) NSNumber *subnetworkid;
+@property (nonatomic) NSNumber *networkId;
+@property (nonatomic) NSNumber *subnetworkId;
+@property (nonatomic) NSDictionary *keyValues;
 
 - (void)setupController;
 

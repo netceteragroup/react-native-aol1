@@ -34,6 +34,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		18D6A7FB84E5F08E98D7DDA5 /* libPods-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5718A178E5F55611A365112 /* libPods-example.a */; };
+		401C1FC61F6935B200D64D13 /* ADTECHAdConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 401C1FC51F6935B200D64D13 /* ADTECHAdConfiguration.plist */; };
 		E7F889DA765E622BEBC33183 /* libPods-exampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 411187A5611F47C7EBA6E456 /* libPods-exampleTests.a */; };
 /* End PBXBuildFile section */
 
@@ -74,9 +75,6 @@
 		0A603F4A1F4474F900238AFF /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		0A603F4C1F44751100238AFF /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
 		0A603F4E1F4476F000238AFF /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		0A603F551F4477D500238AFF /* ADTECHAdConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ADTECHAdConfiguration.plist; sourceTree = "<group>"; };
-		0A603F561F4477D500238AFF /* ADTECHLocalizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = ADTECHLocalizable.strings; sourceTree = "<group>"; };
-		0AB4B6081F45E065008256D6 /* ADTECHMobileSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ADTECHMobileSDK.bundle; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = example/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = example/AppDelegate.m; sourceTree = "<group>"; };
@@ -84,6 +82,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = example/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = example/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = example/main.m; sourceTree = "<group>"; };
+		401C1FC51F6935B200D64D13 /* ADTECHAdConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ADTECHAdConfiguration.plist; sourceTree = "<group>"; };
 		411187A5611F47C7EBA6E456 /* libPods-exampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-exampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DF3CAB1CF10EE308DCC80F4 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
 		A6E11B8D3E46EF7A05EBE191 /* Pods-exampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-exampleTests/Pods-exampleTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -183,9 +182,7 @@
 		13B07FAE1A68108700A75B9A /* example */ = {
 			isa = PBXGroup;
 			children = (
-				0A603F551F4477D500238AFF /* ADTECHAdConfiguration.plist */,
-				0A603F561F4477D500238AFF /* ADTECHLocalizable.strings */,
-				0AB4B6081F45E065008256D6 /* ADTECHMobileSDK.bundle */,
+				401C1FC51F6935B200D64D13 /* ADTECHAdConfiguration.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -330,6 +327,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				401C1FC61F6935B200D64D13 /* ADTECHAdConfiguration.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -442,7 +440,6 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-example/Pods-example-resources.sh",
 				"${PODS_ROOT}/../../../libraries/ios/ADTECHMobileSDK.bundle",
 				"${PODS_ROOT}/../../../libraries/ios/ADTECHLocalizable.strings",
-				"${PODS_ROOT}/../../../libraries/ios/ADTECHAdConfiguration.plist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

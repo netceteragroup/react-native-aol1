@@ -29,10 +29,8 @@ Pod::Spec.new do |s|
   s.public_header_files = "ADTECHMobileSDK.framework/Headers/*.h"
 
   s.resources = 'ADTECHMobileSDK.bundle', 'ADTECHLocalizable.strings'
-  #s.resources = 'ADTECHMobileSDK.bundle', 'ADTECHLocalizable.strings', 'ADTECHAdConfiguration.plist'
 
-  #s.frameworks = "AdSupport", "AudioToolbox", "AVFoundation", "CFNetwork", "CoreData", "CoreGraphics", "CoreLocation", "CoreMedia", "CoreMotion", "CoreVideo", "EventKit", "EventKitUI", "MediaPlayer", "MessageUI", "MobileCoreServices", "QuartzCore", "SafariServices", "Security", "StoreKit", "SystemConfiguration"
-  #s.frameworks = "AdSupport", "AudioToolbox", "AVFoundation", "CFNetwork", "CoreData", "CoreGraphics", "CoreLocation", "CoreMedia", "CoreMotion", "CoreVideo", "EventKit", "EventKitUI", "MediaPlayer", "MessageUI", "MobileCoreServices", "QuartzCore", "SafariServices", "Security", "StoreKit", "SystemConfiguration"
+  s.frameworks = "AdSupport", "AudioToolbox", "AVFoundation", "CFNetwork", "CoreData", "CoreGraphics", "CoreLocation", "CoreMedia", "CoreMotion", "CoreVideo", "EventKit", "EventKitUI", "MediaPlayer", "MessageUI", "MobileCoreServices", "QuartzCore", "SafariServices", "Security", "StoreKit", "SystemConfiguration"
   s.libraries = "z", "xml2"
 
 end

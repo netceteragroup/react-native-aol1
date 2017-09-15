@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { requireNativeComponent } from 'react-native';
-import PropTypes, { string, func, number } from 'prop-types'
+import PropTypes, { string, func, number, object } from 'prop-types'
 
 class AdTechView extends Component {
   static propTypes = {
@@ -10,6 +10,7 @@ class AdTechView extends Component {
     type: string.isRequired,
     networkId: number.isRequired,
     subnetworkId: number.isRequired,
+    keyValues: object,
     onAdFetchSuccess: func,
     onAdFetchFail: func,
     onInterstitialHidden: func

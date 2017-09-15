@@ -1,15 +1,10 @@
-//
-//  ATBannerViewController.m
-//  RNAdtech
-//
-//  Created by Andi Anton on 21/08/2017.
-//  Copyright © 2017 Facebook. All rights reserved.
-//
-
 #import "ATBannerViewController.h"
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
+#import <React/RCTLog.h>
+#import <React/RCTBridge.h>
 
-@interface ATBannerViewController () {
+@interface ATBannerViewController ()
+{
     ATBannerView *bannerView;
     ATInterstitial *interstitial;
 }
@@ -18,13 +13,15 @@
 
 @implementation ATBannerViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 }
 
-- (BOOL)areParametersValid {
-    if(self.alias == nil || self.networkid == nil || self.subnetworkid == nil){
-        NSLog(@"\nERROR: you MUST provide alias, networkid and subnetworkid values in order to see the ad!\n");
+- (BOOL)areParametersValid
+{
+    if(!self.alias || !self.networkId || !self.subnetworkId || !self.type) {
+        RCTLogError(@"You MUST provide: 'type', 'alias', 'networkId' and 'subnetworkId' parameters in order to see an ad!");
         return NO;
     }
     
@@ -33,29 +30,24 @@
 
 - (void)setupController
 {
-    if([[self.type lowercaseString] isEqualToString:@"banner"]){
+    if(![self areParametersValid]) {
+        return;
+    }
+
+    if ([self isType:@"banner"]) {
         [self setupBannerView];
-    } else if([[self.type lowercaseString] isEqualToString:@"interstitial"]) {
+    } else if ([self isType:@"interstitial"]) {
         [self setupInterstitialView];
     }
 }
 
-- (void)setupBannerView {
-
-    if(![self areParametersValid]){
-        return;
-    }
+- (void)setupBannerView
+{
     if (bannerView) {
         [bannerView removeFromSuperview];
     }
 
-    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-    
-    configuration.alias = self.alias;
-    configuration.domain = @"a.adtech.de";
-    configuration.networkID = [self.networkid integerValue];
-    configuration.subNetworkID = [self.subnetworkid integerValue];
-    configuration.openLandingPagesThroughBrowser = NO;
+    ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
     bannerView = [[ATBannerView alloc] initWithFrame:self.view.frame];
     bannerView.configuration = configuration;
@@ -69,36 +61,87 @@
 
 - (void)setupInterstitialView
 {
-    if(![self areParametersValid]){
-        return;
-    }
-    
     // create an interstitial
     interstitial = [[ATInterstitial alloc] init];
     interstitial.delegate = self.interstitialDelegate;
     interstitial.viewController = self;
     
     // configure it
-    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
-    
-    configuration.alias = self.alias;
-    configuration.domain = @"a.adtech.de";
-    configuration.networkID = [self.networkid integerValue];
-    configuration.subNetworkID = [self.subnetworkid integerValue];
-    configuration.openLandingPagesThroughBrowser = NO;
-    
-    /*
-    configuration.alias = @"interstitial-top-5";
-    configuration.networkID = 23;
-    configuration.subNetworkID = 4;
-    */
-    
+    ATAdtechAdConfiguration *configuration = [self adConfiguration];
+
+    UIImage *normalStateImage = [UIImage imageNamed:@"close_box_red.png"];
+    UIImage *highlightedStateImage = [UIImage imageNamed:@"close_box_black.png"];
+
     // set image resources for close indicator when it's in DefaulState and PressedState.
-    configuration.closeIndicator = [ATCloseIndicator closeIndicatorWithNormalStateImage:[UIImage imageNamed:@"close_box_red.png"] andHighlightedStateImage:[UIImage imageNamed:@"close_box_black.png"]];
+    configuration.closeIndicator =
+                    [ATCloseIndicator closeIndicatorWithNormalStateImage:normalStateImage
+                                                andHighlightedStateImage:highlightedStateImage];
     
     interstitial.configuration = configuration;
     
     [interstitial load];
+}
+
+#pragma mark - Helpers
+
+- (BOOL)isType:(NSString *)type
+{
+    return [self.type compare:type options:NSCaseInsensitiveSearch] == NSOrderedSame;
+}
+
+- (ATAdtechAdConfiguration *)adConfiguration
+{
+    ATAdtechAdConfiguration *configuration = [ATAdtechAdConfiguration configuration];
+
+    configuration.alias = self.alias;
+    configuration.networkID = [self.networkId unsignedIntegerValue];
+    configuration.subNetworkID = [self.subnetworkId unsignedIntegerValue];
+
+    if (self.keyValues.count > 0) {
+        for (NSString *key in self.keyValues) {
+            NSArray *values = self.keyValues[key];
+
+            NSString *processedKey = [key hasPrefix:@"kv"]
+                                     ? [key substringFromIndex:[@"kv" length]]
+                                     : key;
+
+            NSArray *processedValues = [values isKindOfClass:[NSArray class]]
+            ? values
+            : @[values];
+
+            if (processedKey.length > 0) {
+                NSError *error;
+
+                if ([configuration addUserKey:processedKey values:processedValues error:&error]) {
+                    RCTLogInfo(@"Successfully registered key: '%@' with value '%@'"
+                               , processedKey
+                               , processedValues);
+                } else {
+                    RCTLogError(@"Failed to register registered key: '%@' with value '%@'. Reason: %@"
+                               , processedKey
+                               , processedValues
+                               , error.localizedDescription);
+                }
+            }
+        }
+
+    }
+
+    if ([configuration isValid]) {
+        RCTLogInfo(@"Successfully configured an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
+                   , self.alias
+                   , self.networkId
+                   , self.subnetworkId
+                   , self.type);
+    } else {
+        RCTLogInfo(@"Failed to configure an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
+                   , self.alias
+                   , self.networkId
+                   , self.subnetworkId
+                   , self.type);
+    }
+
+    return configuration;
 }
 
 @end
