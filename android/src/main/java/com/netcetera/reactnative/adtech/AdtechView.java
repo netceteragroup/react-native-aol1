@@ -10,6 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.adtech.mobilesdk.publisher.view.AdtechInterstitialView;
+import com.adtech.mobilesdk.publisher.view.AdtechInterstitialViewCallback;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -40,30 +42,23 @@ class AdtechView extends RelativeLayout {
     private String appName;
     private String domain;
 
+    private AdtechBannerView adtechBannerView;
+    private AdtechInterstitialView adtechInterstitialView;
+
     public AdtechView(Context context, ReactActivity activity, String appName, String domain) {
         super(context);
         this.appName = appName;
         this.domain = domain;
         this.activity = activity;
 
-        activity.getLayoutInflater().inflate(R.layout.add_container, this, true);
-        //LayoutInflater.from(getContext()).inflate(R.layout.add_container, this, true);
+        //activity.getLayoutInflater().inflate(R.layout.add_container, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.add_container, this, true);
         mainContainer = this;
 
         findViews();
         setLoadingView();
-
-        adtechBannerView = (AdtechBannerView)findViewById(R.id.ad_banner);
     }
 
-    /**
-     * 5 parameters are needed
-     * type,
-     * alias,
-     * networkid,
-     * subnetworkid
-     * height
-     */
     private void checkIfAllParametersWereLoaded() {
         if (alias != null && type != null && networkId > 0 && subnetworkId > 0)
         {
@@ -118,18 +113,6 @@ class AdtechView extends RelativeLayout {
         loadingProgressBar = (ProgressBar) mainContainer.findViewById(R.id.loading_progress_bar);
     }
 
-    private void setAdtechView() {
-        loadingProgressBar.setVisibility(View.INVISIBLE);
-        if(type.equalsIgnoreCase("interstitial")) {
-            setupInterstitialAd();
-        } else {
-            adtechBannerView.setVisibility(View.VISIBLE);
-            adtechBannerView.bringToFront();
-            adtechBannerView.requestLayout();
-        }
-    }
-
-
     private void setLoadingView() {
         LogUtils.d(TAG, "setLoadingView");
         loadingContainer.setVisibility(View.VISIBLE);
@@ -143,24 +126,19 @@ class AdtechView extends RelativeLayout {
         }
     }
 
-    private AdtechBannerView adtechBannerView;
-
-    private FullScreenDialog dialog = null;
-
-    private void setupInterstitialAd(){
-        if(dialog == null){
-            dialog = new FullScreenDialog(getContext());
-        }
-        dialog.setAdConfiguration(getAdConfiguration());
-
-        if (!dialog.isShowing()) {
-            dialog.setParentActivity(activity);
-            dialog.show();
-        }
-        dialog.showInterstitial();
-    }
-
     private void setupBannerAd() {
+        if (adtechBannerView == null) {
+            LayoutParams params = new LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.MATCH_PARENT
+            );
+
+            adtechBannerView = new AdtechBannerView(getContext());
+            adtechBannerView.setLayoutParams(params);
+            addView(adtechBannerView);
+
+        }
+
         LogUtils.d(TAG, "setupBannerAd");
         //parameters setup bannerad start
         AdtechAdConfiguration adtechAdConfiguration = getAdConfiguration();
@@ -179,7 +157,6 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdSuccess() {
                         LogUtils.d(TAG, "onAdSuccess");
-
                         adFecthedSuccessfully();
                     }
 
@@ -196,7 +173,6 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdFailure(ErrorCause cause) {
                         LogUtils.d(TAG, "onAdFailure");
-
                         adFetchFailed();
                     }
 
@@ -224,11 +200,77 @@ class AdtechView extends RelativeLayout {
 
                     @Override
                     public void onAdSuccessWithSignal(int... signals) {
-                        setAdtechView();
                         adFecthedSuccessfully();
                     }
                 });
         adtechBannerView.load();
+    }
+
+    private void setupInterstitialAd() {
+        if (adtechInterstitialView == null) {
+            LayoutParams params = new LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.MATCH_PARENT
+            );
+
+            adtechInterstitialView = new AdtechInterstitialView(activity.getBaseContext());
+            adtechInterstitialView.setLayoutParams(params);
+            activity.addContentView(adtechInterstitialView, params);
+        }
+
+        LogUtils.d(TAG, "setupInterstititalAd");
+
+        adtechInterstitialView.setAdConfiguration(getAdConfiguration());
+        adtechInterstitialView.setViewCallback(new AdtechInterstitialViewCallback() {
+            @Override
+            public void onAdLeave() {
+                super.onAdLeave();
+            }
+
+            @Override
+            public void onAdDismiss() {
+                super.onAdDismiss();
+                adInterstitialHidden();
+            }
+
+            @Override
+            public void onAdSuccess() {
+                super.onAdSuccess();
+                adFecthedSuccessfully();
+
+                LogUtils.d(TAG, "onAdSuccess");
+                adtechInterstitialView.setVisibility(View.VISIBLE);
+                adtechInterstitialView.bringToFront();
+                adtechInterstitialView.requestLayout();
+            }
+
+            @Override
+            public void onAdSuccessWithSignal(int... signals) {
+                super.onAdSuccessWithSignal(signals);
+                adFecthedSuccessfully();
+                adtechInterstitialView.setVisibility(View.VISIBLE);
+                adtechInterstitialView.bringToFront();
+                adtechInterstitialView.requestLayout();
+            }
+
+            @Override
+            public void onAdFailure(ErrorCause cause) {
+                super.onAdFailure(cause);
+                adFetchFailed();
+            }
+
+            @Override
+            public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
+                super.onAdFailureWithSignal(cause, signals);
+                adFetchFailed();
+            }
+
+            @Override
+            public void onCustomMediation() {
+                super.onCustomMediation();
+            }
+        });
+        adtechInterstitialView.load();
     }
 
     @Override
@@ -239,7 +281,13 @@ class AdtechView extends RelativeLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        adtechBannerView.stop();
+
+        if (adtechBannerView != null) {
+            adtechBannerView.stop();
+        }
+        if (adtechInterstitialView != null) {
+            adtechInterstitialView.stop();
+        }
     }
 
     @Override
@@ -254,7 +302,9 @@ class AdtechView extends RelativeLayout {
             measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
             layout(getLeft(), getTop(), getRight(), getBottom());
-            adtechBannerView.requestLayout();
+            if (adtechBannerView != null) {
+                adtechBannerView.requestLayout();
+            }
         }
     };
 
@@ -276,6 +326,11 @@ class AdtechView extends RelativeLayout {
     public void adFetchFailed()
     {
         triggerAnEvent("onAdFetchFail");
+    }
+
+    public void adInterstitialHidden()
+    {
+        triggerAnEvent("onInterstitialHidden");
     }
 
     private AdtechAdConfiguration getAdConfiguration()

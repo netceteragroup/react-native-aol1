@@ -19,11 +19,4 @@ android:layout_height="?android:attr/actionBarSize"
         android:id="@+id/fake_topbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-    <com.adtech.mobilesdk.publisher.view.AdtechInterstitialView
-        android:visibility="invisible"
-        android:id="@+id/ad_interstitial"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.adtech.mobilesdk.publisher.view.AdtechInterstitialView>
-
 </LinearLayout>

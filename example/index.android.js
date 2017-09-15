@@ -44,7 +44,7 @@ export default class example extends Component {
           networkId={23}
           subnetworkId={4}
           type={'interstitial'}
-          //height={0}
+          height={0}
           />
           <TextInput style={{width:250}}/>
       </View>
