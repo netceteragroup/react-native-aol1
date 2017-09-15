@@ -1,5 +1,8 @@
 package com.netcetera.reactnative.adtech;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +10,13 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
@@ -19,45 +27,33 @@ import com.adtech.mobilesdk.publisher.view.AdtechBannerViewCallback;
 import com.adtech.mobilesdk.publisher.view.BannerResizeBehavior;
 import com.adtech.mobilesdk.publisher.view.BannerResizeProperties;
 import com.adtech.mobilesdk.publisher.view.BannerResizeType;
-import com.facebook.react.ReactActivity;
 import com.netcetera.reactnative.utils.LogUtils;
 
-class AdtechView extends FrameLayout {
-
-    //This counter was added to see if there are sync issues and
-    //only one instance per view should be created.
-    //It was needed to test on TweetView approach that creates 2 instances of the
-    //same view.
-    private static int instancesCounter = 0;
-
+class AdtechView extends RelativeLayout {
     private static final String TAG = AdtechView.class.getCanonicalName();
 
     private View mainContainer;
     private RelativeLayout loadingContainer;
     private ProgressBar loadingProgressBar;
-    private int reactTag;
+
     private ReactActivity activity;
     private String appName;
+    private String domain;
 
-    public AdtechView(Context context, ReactActivity activity, String appName) {
+    public AdtechView(Context context, ReactActivity activity, String appName, String domain) {
         super(context);
-        this.activity = activity;
-        instancesCounter++;
-        LogUtils.d(TAG, "AdtechView(Context context) " + instancesCounter);
-        initContent();
         this.appName = appName;
+        this.domain = domain;
+        this.activity = activity;
 
-        adtechBannerView = (AdtechBannerView) findViewById(R.id.ad_banner);
-
-    }
-
-    private void initContent() {
-        LogUtils.d(TAG, "initContent");
-        LayoutInflater.from(getContext()).inflate(R.layout.add_container, this, true);
+        activity.getLayoutInflater().inflate(R.layout.add_container, this, true);
+        //LayoutInflater.from(getContext()).inflate(R.layout.add_container, this, true);
         mainContainer = this;
 
         findViews();
         setLoadingView();
+
+        adtechBannerView = (AdtechBannerView)findViewById(R.id.ad_banner);
     }
 
     /**
@@ -68,50 +64,52 @@ class AdtechView extends FrameLayout {
      * subnetworkid
      * height
      */
-    private void checkIfAllParametersWereLoaded(){
-        if (mAlias != null && mType != null && mNetworkId > 0 && mSubnetworkId > 0)
+    private void checkIfAllParametersWereLoaded() {
+        if (alias != null && type != null && networkId > 0 && subnetworkId > 0)
         {
-            loadAlias();
+            loadAd();
         }
     }
 
-    private String mAlias;
+    private String alias;
 
     public void setAlias(String alias) {
-        mAlias = alias;
-        LogUtils.d(TAG, "setAlias, alias = " + alias);
+        this.alias = alias;
         checkIfAllParametersWereLoaded();
     }
 
-    private String mType;
+    private String type;
 
     public void setType(String type) {
-        mType = type;
-        LogUtils.d(TAG, "setType" + type);
+        this.type = type;
         checkIfAllParametersWereLoaded();
     }
 
-    private int mNetworkId;
+    private int networkId;
 
     public void setNetworkId(int networkId) {
-        mNetworkId = networkId;
-        LogUtils.d(TAG, "setNetworkId " + networkId);
+        this.networkId = networkId;
         checkIfAllParametersWereLoaded();
     }
 
-    private int mSubnetworkId;
+    private int subnetworkId;
 
     public void setSubnetworkId(int subnetworkId) {
-        mSubnetworkId = subnetworkId;
-        LogUtils.d(TAG, "setSubnetworkId " + subnetworkId);
+        this.subnetworkId = subnetworkId;
         checkIfAllParametersWereLoaded();
     }
 
-    private int mHeight;
+    private ReadableMap keyValues;
+
+    public void setKeyValues(ReadableMap keyValues) {
+        this.keyValues = keyValues;
+        checkIfAllParametersWereLoaded();
+    }
+
+    private int height;
 
     public void setHeight(int height){
-        mHeight = height;
-        LogUtils.d(TAG, "setHeight, height = " + height);
+        this.height = height;
         checkIfAllParametersWereLoaded();
     }
 
@@ -120,11 +118,9 @@ class AdtechView extends FrameLayout {
         loadingProgressBar = (ProgressBar) mainContainer.findViewById(R.id.loading_progress_bar);
     }
 
-    private boolean isLoaded = false;
-
     private void setAdtechView() {
         loadingProgressBar.setVisibility(View.INVISIBLE);
-        if(mType.equalsIgnoreCase("interstitial")) {
+        if(type.equalsIgnoreCase("interstitial")) {
             setupInterstitialAd();
         } else {
             adtechBannerView.setVisibility(View.VISIBLE);
@@ -139,11 +135,10 @@ class AdtechView extends FrameLayout {
         loadingContainer.setVisibility(View.VISIBLE);
     }
 
-    private void loadAlias() {
-        LogUtils.d(TAG, "loadAlias, alias = " + mAlias);
-        if(mType.equalsIgnoreCase("banner")){
+    private void loadAd() {
+        if(type.equalsIgnoreCase("banner")){
             setupBannerAd();
-        } else if(mType.equalsIgnoreCase("interstitial")){
+        } else if(type.equalsIgnoreCase("interstitial")){
             setupInterstitialAd();
         }
     }
@@ -154,26 +149,22 @@ class AdtechView extends FrameLayout {
 
     private void setupInterstitialAd(){
         if(dialog == null){
-            dialog = new FullScreenDialog(getContext(), mAlias, appName, mNetworkId, mSubnetworkId);
+            dialog = new FullScreenDialog(getContext());
         }
+        dialog.setAdConfiguration(getAdConfiguration());
+
         if (!dialog.isShowing()) {
-            dialog.showInterstitial();
+            dialog.setParentActivity(activity);
+            dialog.show();
         }
+        dialog.showInterstitial();
     }
 
     private void setupBannerAd() {
         LogUtils.d(TAG, "setupBannerAd");
         //parameters setup bannerad start
-        AdtechAdConfiguration conf = new AdtechAdConfiguration(appName);
-        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration(appName);
-        adtechAdConfiguration.setDomain("a.adtech.de");
-        //official example configuration is not working
-        adtechAdConfiguration.setAlias(mAlias);
-        adtechAdConfiguration.setNetworkId(mNetworkId);
-        adtechAdConfiguration.setSubnetworkId(mSubnetworkId);
-        //parameters setup bannerad end
-        //Mandatory: provide the banner view with the configuration object. This can be replaced at runtime with another
-        //configuration object pointing to a different ad-placement.
+        AdtechAdConfiguration adtechAdConfiguration = getAdConfiguration();
+
         adtechBannerView.setAdConfiguration(adtechAdConfiguration);
 
         //Optional: set a call-back to be notified of certain events in the life-cycle of the ad */
@@ -182,77 +173,59 @@ class AdtechView extends FrameLayout {
 
                     @Override
                     public void onAdSuspend() {
-                        // This method is called to inform that the application should suspend its job, when the advertisement has been
-                        // resized and covers the whole screen. <p> This might be useful in applications like games, or applications
-                        // having video play-back.
                         LogUtils.d(TAG, "onAdSuspend");
                     }
 
                     @Override
                     public void onAdSuccess() {
-                        // This method is called when an ad was downloaded successfully.
                         LogUtils.d(TAG, "onAdSuccess");
 
-                        triggerAnEvent("onAdFetchSuccess");
+                        adFecthedSuccessfully();
                     }
 
                     @Override
                     public void onAdResume() {
-                        // This method is called when the application has been resumed from the suspended state.
                         LogUtils.d(TAG, "onAdResume");
                     }
 
                     @Override
                     public void onAdLeave() {
-                        // This method is called when the current application is left because the user clicked a banner which will be
-                        // opened in a the external browser.
                         LogUtils.d(TAG, "onAdLeave");
                     }
 
                     @Override
                     public void onAdFailure(ErrorCause cause) {
-                        // This method is called when an ad download failed. This could happen because of networking reasons or other
-                        // server communication reasons.
                         LogUtils.d(TAG, "onAdFailure");
 
-                        triggerAnEvent("onAdFetchFail");
+                        adFetchFailed();
                     }
 
                     @Override
                     public void onCustomMediation() {
-                        // This method is called when the server send a request to trigger a custom mediation event.
                         LogUtils.d(TAG, "onCustomMediation");
                     }
 
                     @Override
                     public BannerResizeBehavior onAdWillResize(BannerResizeProperties resizeProperties) {
-                        // This method is called when the ad is going to be resized.
                         LogUtils.d(TAG, "onAdWillResize");
                         return new BannerResizeBehavior(BannerResizeType.INLINE, 3000);
                     }
 
                     @Override
                     public void onAdDidResize(BannerResizeProperties resizeProperties) {
-                        // This method is called when the ad is resized.
                         LogUtils.d(TAG, "onAdDidResize");
                     }
 
                     @Override
                     public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
-                        // This method is called when an ad could not be fetched, but signal codes were provided by server.
                         LogUtils.d(TAG, "onAdSuccess");
-
                         triggerAnEvent("onAdFetchFail");
                     }
 
                     @Override
                     public void onAdSuccessWithSignal(int... signals) {
-                        // This method is called when an ad is successfully fetched and signal codes were provided by server.
-                        LogUtils.d(TAG, "onAdSuccessWithSignal " + instancesCounter);
                         setAdtechView();
-                        isLoaded = true;
-
-                        triggerAnEvent("onAdFetchSuccess");
+                        adFecthedSuccessfully();
                     }
                 });
         adtechBannerView.load();
@@ -269,9 +242,6 @@ class AdtechView extends FrameLayout {
         adtechBannerView.stop();
     }
 
-    //refresh start
-    //Code from TweetView does not work ok. There are 2 instances of the view.
-    //This solution with requestLayout works ok.
     @Override
     public void requestLayout() {
         super.requestLayout();
@@ -297,5 +267,103 @@ class AdtechView extends FrameLayout {
                 eventName,
                 evt);
     }
-    //refresh end
+
+    public void adFecthedSuccessfully()
+    {
+        triggerAnEvent("onAdFetchSuccess");
+    }
+
+    public void adFetchFailed()
+    {
+        triggerAnEvent("onAdFetchFail");
+    }
+
+    private AdtechAdConfiguration getAdConfiguration()
+    {
+        AdtechAdConfiguration configuration = new AdtechAdConfiguration(appName);
+        configuration.setDomain(domain);
+
+        configuration.setAlias(alias);
+        configuration.setNetworkId(networkId);
+        configuration.setSubnetworkId(subnetworkId);
+
+        if (keyValues != null) {
+            ReadableMapKeySetIterator iterator = keyValues.keySetIterator();
+
+            while (iterator.hasNextKey()) {
+                String key = iterator.nextKey();
+                ReadableType type = keyValues.getType(key);
+                String[] processedValues = {};
+
+                switch (type) {
+                    case Null:
+                        break;
+                    case Boolean:
+                        Boolean boolValue = keyValues.getBoolean(key);
+                        processedValues = new String[] { Boolean.toString(boolValue) };
+                        break;
+                    case Number:
+                        Double doubleValue = keyValues.getDouble(key);
+                        processedValues = new String[] { Double.toString(doubleValue) };
+                        break;
+                    case String:
+                        processedValues = new String[] { keyValues.getString(key) };
+                        break;
+                    case Map:
+                        break;
+                    case Array:
+                        ReadableArray arrayValue = keyValues.getArray(key);
+                        processedValues = stringArrayFromReadableArray(arrayValue);
+                        break;
+                    default:
+                        break;
+                }
+
+                String processedKey = key.startsWith("kv") ? key.substring("kv".length()) : key;
+
+                configuration.addKeyValueParameter(processedKey, processedValues);
+            }
+        }
+
+        if (configuration.isValid()) {
+            LogUtils.d(TAG, "Configuration is valid");
+        } else {
+            LogUtils.e(TAG, "Configuration is not valid");
+        }
+
+        return configuration;
+    }
+
+    private String[] stringArrayFromReadableArray(ReadableArray readableArray)
+    {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (int idx = 0; idx < readableArray.size(); idx++) {
+            ReadableType type = readableArray.getType(idx);
+
+            switch (type) {
+                case Null:
+                    break;
+                case Boolean:
+                    Boolean boolValue = readableArray.getBoolean(idx);
+                    result.add(Boolean.toString(boolValue));
+                    break;
+                case Number:
+                    Double doubleValue = readableArray.getDouble(idx);
+                    result.add(Double.toString(doubleValue));
+                    break;
+                case String:
+                    result.add(readableArray.getString(idx));
+                    break;
+                case Map:
+                    break;
+                case Array:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return result.toArray(new String[]{});
+    }
 }

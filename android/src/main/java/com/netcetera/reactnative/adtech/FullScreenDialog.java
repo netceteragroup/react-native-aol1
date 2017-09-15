@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
@@ -24,34 +25,37 @@ public class FullScreenDialog extends AlertDialog {
 
     private static final String TAG = FullScreenDialog.class.getCanonicalName();
 
-    private boolean isLoaded = false;
-
     private AdtechInterstitialView adtechInterstitialView;
 
-    private String alias;
-    private String appName;
-    private int networkId;
-    private int subnetworkId;
 
-    protected FullScreenDialog(Context context, String alias, String appName, int networkId, int subnetworkId) {
+    protected FullScreenDialog(Context context) {
         super(context, R.style.DlgFullTheme);
         LogUtils.d(TAG, "FullScreenDialog");
-        this.alias = alias;
-        this.appName = appName;
-        this.networkId = networkId;
-        this.subnetworkId = subnetworkId;
     }
 
     private String title = "";
 
-    public void setTitle(String title){
+    public void setTitle(String title)
+    {
         this.title = title;
+    }
+
+    private AdtechAdConfiguration adConfiguration;
+
+    public void setAdConfiguration(AdtechAdConfiguration adConfiguration)
+    {
+        this.adConfiguration = adConfiguration;
+    }
+
+    private ReactActivity parentActivity;
+    public void setParentActivity(ReactActivity parentActivity)
+    {
+        this.parentActivity = parentActivity;
     }
 
     public void showInterstitial()
     {
         LogUtils.d(TAG, "show");
-        show();
 
         setupInterstititalAd();
 
@@ -108,26 +112,17 @@ public class FullScreenDialog extends AlertDialog {
 
     private void setupInterstititalAd() {
         LogUtils.d(TAG, "setupInterstititalAd");
-        //parameters setup interstitalad start
-        AdtechAdConfiguration adtechAdConfiguration = new AdtechAdConfiguration(appName);
-        adtechAdConfiguration.setAlias(this.alias);
-        adtechAdConfiguration.setDomain("a.adtech.de");
-        adtechAdConfiguration.setNetworkId(networkId);
-        adtechAdConfiguration.setSubnetworkId(subnetworkId);
-        //parameters setup interstitalad end
-        adtechInterstitialView.setAdConfiguration(adtechAdConfiguration);
+
+        adtechInterstitialView.setAdConfiguration(this.adConfiguration);
         adtechInterstitialView.setViewCallback(new AdtechInterstitialViewCallback() {
             @Override
             public void onAdLeave() {
                 super.onAdLeave();
-                LogUtils.d(TAG, "onAdLeave");
             }
 
             @Override
             public void onAdDismiss() {
                 super.onAdDismiss();
-                LogUtils.d(TAG, "onAdDismiss");
-                //onBackPressed();
 
                 hide();
             }
@@ -150,17 +145,14 @@ public class FullScreenDialog extends AlertDialog {
 
                 show();
 
-                //LogUtils.d(TAG, "onAdSuccessWithSignal " + instancesCounter);
                 adtechInterstitialView.setVisibility(View.VISIBLE);
                 adtechInterstitialView.bringToFront();
                 adtechInterstitialView.requestLayout();
-                isLoaded = true;
             }
 
             @Override
             public void onAdFailure(ErrorCause cause) {
                 super.onAdFailure(cause);
-                LogUtils.d(TAG, "onAdFailure");
 
                 hide();
             }
@@ -168,7 +160,6 @@ public class FullScreenDialog extends AlertDialog {
             @Override
             public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
                 super.onAdFailureWithSignal(cause, signals);
-                LogUtils.d(TAG, "onAdFailureWithSignal");
 
                 hide();
             }
@@ -176,19 +167,8 @@ public class FullScreenDialog extends AlertDialog {
             @Override
             public void onCustomMediation() {
                 super.onCustomMediation();
-                LogUtils.d(TAG, "onCustomMediation");
             }
         });
         adtechInterstitialView.load();
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
     }
 }

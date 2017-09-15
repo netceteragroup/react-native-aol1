@@ -2,7 +2,6 @@
 package com.netcetera.reactnative.adtech;
 
 import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
@@ -14,9 +13,11 @@ import java.util.List;
 public class AdtechViewPackage implements ReactPackage {
 
     private String appName;
+    private String domain;
 
-    public AdtechViewPackage(String appName) {
+    public AdtechViewPackage(String appName, String domain) {
         this.appName = appName;
+        this.domain = domain;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class AdtechViewPackage implements ReactPackage {
     public List<ViewManager> createViewManagers(
             ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new AdtechViewManager(appName)
+                new AdtechViewManager(appName, domain)
         );
     }
 }

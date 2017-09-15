@@ -13,9 +13,14 @@ import {
 import { AdTechView } from 'react-native-adtech';
 
 export default class example extends Component {
-
   render() {
+    const kValues = {
+      kvenv: 'test',
+      kvarticle: ['none']
+    }
+
     return (
+
       <View style={styles.container}>
         <Text style={styles.text}>
            Text Above Banner Ad
@@ -26,6 +31,7 @@ export default class example extends Component {
           networkId={23}
           subnetworkId={4}
           type={'banner'}
+          keyValues={kValues}
           height={50}
           onAdFetchSuccess={() => console.log('New ad fetched')}
           />
@@ -39,7 +45,7 @@ export default class example extends Component {
           subnetworkId={4}
           type={'interstitial'}
           //height={0}
-          /> 
+          />
           <TextInput style={{width:250}}/>
       </View>
     );
