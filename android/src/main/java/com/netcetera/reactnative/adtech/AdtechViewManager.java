@@ -1,19 +1,25 @@
 package com.netcetera.reactnative.adtech;
 
+import android.support.annotation.NonNull;
+
 import java.util.Map;
 
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.netcetera.reactnative.utils.LogUtils;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.ReactActivity;
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.common.MapBuilder;
 
 import javax.annotation.Nullable;
 
-public class AdtechViewManager extends SimpleViewManager<AdtechView> {
+public class AdtechViewManager
+        extends BaseViewManager<AdtechView, AdtechShadowNode>
+        implements AdtechView.SizeChangeListener {
 
     private static final String TAG = AdtechViewManager.class.getCanonicalName();
     private String appName;
@@ -60,6 +66,12 @@ public class AdtechViewManager extends SimpleViewManager<AdtechView> {
         view.setKeyValues(keyValues);
     }
 
+    @ReactProp(name = "maxHeight")
+    public void setMaxHeight(AdtechView view, int maxHeight) {
+        LogUtils.d(TAG, "maxHeight = " + maxHeight);
+        view.setMaxHeight(maxHeight);
+    }
+
     /**
      * to_be_investigated
      * To investigate if this setHeight method can be removed because I think there is already a
@@ -78,7 +90,25 @@ public class AdtechViewManager extends SimpleViewManager<AdtechView> {
                 , (ReactActivity)context.getCurrentActivity()
                 , appName
                 , domain);
+
+        view.addSizeChangeListener(this);
         return view;
+    }
+
+    @Override
+    public void onDropViewInstance(AdtechView view) {
+        view.removeSizeChangeListener(this);
+        super.onDropViewInstance(view);
+    }
+
+
+    @NonNull
+    public static AdtechView createAdtechView(ThemedReactContext context) {
+        return new AdtechView(context
+                , (ReactActivity)context.getCurrentActivity()
+                , ""
+                , ""
+        );
     }
 
     @Override
@@ -88,5 +118,37 @@ public class AdtechViewManager extends SimpleViewManager<AdtechView> {
                 "onAdFetchFail", MapBuilder.of("registrationName", "onAdFetchFail"),
                 "onInterstitialHidden", MapBuilder.of("registrationName", "onInterstitialHidden")
         );
+    }
+
+    //start TweetShadowNode methods
+    @Override
+    public void updateExtraData(AdtechView view, Object extraData) {
+        view.setReactTag((Integer) extraData);
+        view.respondToNewProps();
+    }
+
+    @Override
+    public AdtechShadowNode createShadowNodeInstance() {
+        return new AdtechShadowNode();
+    }
+
+    @Override
+    public Class<AdtechShadowNode> getShadowNodeClass() {
+        return AdtechShadowNode.class;
+    }
+
+    @Override
+    public void onSizeChanged(AdtechView view, final int width, final int height) {
+        LogUtils.d(TAG, "Adtech changed size: " + width + ", " + height);
+        ReactContext ctx = (ReactContext) view.getContext();
+        final UIManagerModule uiManager = ctx.getNativeModule(UIManagerModule.class);
+        final int reactTag = view.getReactTag();
+
+        ctx.runOnNativeModulesQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                uiManager.updateNodeSize(reactTag, width, height);
+            }
+        });
     }
 }

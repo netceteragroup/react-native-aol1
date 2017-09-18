@@ -1,12 +1,13 @@
 package com.netcetera.reactnative.adtech;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -32,6 +33,11 @@ import com.adtech.mobilesdk.publisher.view.BannerResizeType;
 import com.netcetera.reactnative.utils.LogUtils;
 
 class AdtechView extends RelativeLayout {
+
+    public interface SizeChangeListener {
+        void onSizeChanged(AdtechView view, int width, int height);
+    }
+
     private static final String TAG = AdtechView.class.getCanonicalName();
 
     private View mainContainer;
@@ -42,8 +48,13 @@ class AdtechView extends RelativeLayout {
     private String appName;
     private String domain;
 
+    private int reactTag;
+    private boolean postponedResize = false;
+
     private AdtechBannerView adtechBannerView;
     private AdtechInterstitialView adtechInterstitialView;
+
+    private ArrayList<SizeChangeListener> sizeChangeListeners = new ArrayList<>();
 
     public AdtechView(Context context, ReactActivity activity, String appName, String domain) {
         super(context);
@@ -101,11 +112,67 @@ class AdtechView extends RelativeLayout {
         checkIfAllParametersWereLoaded();
     }
 
+    private int maxHeight;
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        checkIfAllParametersWereLoaded();
+    }
+
     private int height;
 
     public void setHeight(int height){
         this.height = height;
         checkIfAllParametersWereLoaded();
+    }
+
+    public int getReactTag() {
+        return reactTag;
+    }
+
+    public void setReactTag(int reactTag) {
+        this.reactTag = reactTag;
+    }
+
+    public void respondToNewProps() {}
+
+    private void updateSize() {
+        requestLayout();
+        measureAd();
+
+        int measuredWidth = adtechBannerView.getMeasuredWidth();
+
+        int measuredHeight = (int)(getResources().getDisplayMetrics().density * maxHeight);
+
+        fireSizeChange(measuredWidth, measuredHeight);
+    }
+
+
+    private void measureAd() {
+
+        int w = View.MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY);
+        int h = maxHeight;
+
+        int measuredWidth = adtechBannerView.getMeasuredWidth();
+        int measuredHeight = adtechBannerView.getMeasuredHeight();
+
+        Log.d(TAG, "Measured " + measuredWidth + ", " + measuredHeight);
+
+        adtechBannerView.measure(w, h);
+    }
+
+    public void addSizeChangeListener(@NonNull SizeChangeListener l) {
+        sizeChangeListeners.add(l);
+    }
+
+    public void removeSizeChangeListener(@NonNull SizeChangeListener l) {
+        sizeChangeListeners.remove(l);
+    }
+
+    protected void fireSizeChange(int width, int height) {
+        for (SizeChangeListener l : sizeChangeListeners) {
+            l.onSizeChanged(this, width, height);
+        }
     }
 
     private void findViews() {
@@ -128,14 +195,15 @@ class AdtechView extends RelativeLayout {
 
     private void setupBannerAd() {
         if (adtechBannerView == null) {
-            LayoutParams params = new LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT
-            );
-
-            adtechBannerView = new AdtechBannerView(getContext());
-            adtechBannerView.setLayoutParams(params);
-            addView(adtechBannerView);
+            adtechBannerView = (AdtechBannerView) mainContainer.findViewById(R.id.ad_banner);
+//            LayoutParams params = new LayoutParams(
+//                    LayoutParams.MATCH_PARENT,
+//                    LayoutParams.MATCH_PARENT
+//            );
+////
+//            adtechBannerView = new AdtechBannerView(getContext());
+//            adtechBannerView.setLayoutParams(params);
+//            addView(adtechBannerView);
 
         }
 
@@ -157,7 +225,9 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdSuccess() {
                         LogUtils.d(TAG, "onAdSuccess");
+                        adtechBannerView.setVisibility(VISIBLE);
                         adFecthedSuccessfully();
+                        updateSize();
                     }
 
                     @Override
@@ -184,12 +254,14 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public BannerResizeBehavior onAdWillResize(BannerResizeProperties resizeProperties) {
                         LogUtils.d(TAG, "onAdWillResize");
+                        updateSize();
                         return new BannerResizeBehavior(BannerResizeType.INLINE, 3000);
                     }
 
                     @Override
                     public void onAdDidResize(BannerResizeProperties resizeProperties) {
                         LogUtils.d(TAG, "onAdDidResize");
+                        updateSize();
                     }
 
                     @Override
@@ -200,7 +272,9 @@ class AdtechView extends RelativeLayout {
 
                     @Override
                     public void onAdSuccessWithSignal(int... signals) {
+                        adtechBannerView.setVisibility(VISIBLE);
                         adFecthedSuccessfully();
+                        updateSize();
                     }
                 });
         adtechBannerView.load();
@@ -290,24 +364,6 @@ class AdtechView extends RelativeLayout {
         }
     }
 
-    @Override
-    public void requestLayout() {
-        super.requestLayout();
-        post(measureAndLayout);
-    }
-
-    private final Runnable measureAndLayout = new Runnable() {
-        @Override
-        public void run() {
-            measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
-            layout(getLeft(), getTop(), getRight(), getBottom());
-            if (adtechBannerView != null) {
-                adtechBannerView.requestLayout();
-            }
-        }
-    };
-
     private final void triggerAnEvent(String eventName) {
         WritableMap evt = Arguments.createMap();
 
@@ -320,6 +376,7 @@ class AdtechView extends RelativeLayout {
 
     public void adFecthedSuccessfully()
     {
+        loadingProgressBar.setVisibility(INVISIBLE);
         triggerAnEvent("onAdFetchSuccess");
     }
 
