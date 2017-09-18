@@ -40,6 +40,7 @@ export default class example extends Component {
         	networkId={23}
         	subnetworkId={4}
           keyValues={kValues}
+          maxHeight={50}
           onAdFetchSuccess={() => console.log('New ad fetched')}
         />
         <AdTechView
@@ -72,8 +73,7 @@ const styles = StyleSheet.create({
   },
   adtech: {
     flex: 0,
-    width: 380,
-    height: 160,
+    backgroundColor: '#ff0000',
   },
 });
 

@@ -70,7 +70,7 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
-  AdTechMobileSdk: 5d2d1ffe12b3dfb6b4dd02af0a7b63e7a873ce35
+  AdTechMobileSdk: 96f06584d6110999c94a2f793fe0b7587104ec03
   React: fbe1a006550fb55871cb377ba7741f5d1cfff733
   ReactNativeAdTech: a8785c5e6d5336efc638346fb2bbd83391868821
   Yoga: ff8531e8cf9f7ec92a75dd44286a68c4a084c507

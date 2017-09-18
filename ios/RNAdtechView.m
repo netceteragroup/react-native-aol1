@@ -1,6 +1,7 @@
 #import "RNAdtechView.h"
 #import "ATBannerViewController.h"
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
+#import <React/RCTLog.h>
 
 @interface RNAdtechView() {
     ATBannerViewController *bannerVC;
@@ -61,32 +62,42 @@
 
 #pragma mark - ATBannerViewDelegate
 
-- (void)shouldSuspendForAd:(ATBannerView*)view
+- (void)shouldSuspendForAd:(ATBannerView *)view
 {
 }
 
-- (void)shouldResumeForAd:(ATBannerView*)view
+- (void)shouldResumeForAd:(ATBannerView *)view
 {
 }
 
-- (void)willLeaveApplicationForAd:(ATBannerView*)view
+- (void)willLeaveApplicationForAd:(ATBannerView *)view
 {
 }
-- (void)didFetchNextAd:(ATBannerView*)view signals:(NSArray *)signals
+
+- (void)didFetchNextAd:(ATBannerView *)adTechView signals:(NSArray *)signals
 {
+    [self bannerFetchedSuccessfully:adTechView];
+}
+
+- (void)didFetchNextAd:(ATBannerView *)adTechView
+{
+    [self bannerFetchedSuccessfully:adTechView];
+}
+
+- (void)bannerFetchedSuccessfully:(ATBannerView *)bannerView
+{
+    CGSize desiredSize = [bannerView sizeThatFits:CGSizeMake(self.bounds.size.width, self.maxHeight.floatValue)];
+    desiredSize = CGSizeMake(desiredSize.width, self.maxHeight.floatValue);
+    RCTLogInfo(@"DESIRED SIZE = %f   %f", desiredSize.width, desiredSize.height);
+    [self.delegate adTechView:self requestsResize:desiredSize];
+
+    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
     if (self.onAdFetchSuccess) {
         self.onAdFetchSuccess(@{});
     }
 }
 
-- (void)didFetchNextAd:(ATBannerView *)view
-{
-    if (self.onAdFetchSuccess) {
-        self.onAdFetchSuccess(@{});
-    }
-}
-
-- (void)didFailFetchingAd:(ATBannerView*)view signals:(NSArray *)signals error:(NSError *)error
+- (void)didFailFetchingAd:(ATBannerView *)view signals:(NSArray *)signals error:(NSError *)error
 {
     if (self.onAdFetchFail) {
         self.onAdFetchFail(@{});
@@ -109,7 +120,7 @@
 
 #pragma mark - ATInterstitialDelegate
 
-- (void)didHideInterstitialAd:(ATInterstitial*)ad
+- (void)didHideInterstitialAd:(ATInterstitial *)ad
 {
     if (self.onInterstitialHidden) {
         self.onInterstitialHidden(@{});
@@ -125,7 +136,7 @@
     [ad present];
 }
 
-- (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals
+- (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial *)ad signals:(NSArray *)signals
 {
     if (self.onAdFetchSuccess) {
         self.onAdFetchSuccess(@{});
@@ -134,18 +145,18 @@
 }
 
 
-- (void)didFailFetchingInterstitialAd:(ATInterstitial*)ad signals:(NSArray *)signals
+- (void)didFailFetchingInterstitialAd:(ATInterstitial *)ad signals:(NSArray *)signals
 {
     if (self.onAdFetchFail) {
         self.onAdFetchFail(@{});
     }
 }
 
-- (void)willLeaveApplicationForInterstitialAd:(ATInterstitial*)ad
+- (void)willLeaveApplicationForInterstitialAd:(ATInterstitial *)ad
 {
 }
 
-- (BOOL)shouldOpenLandingPageForAd:(ATInterstitial*)ad withURL:(NSURL*)URL useBrowser:(ATBrowserViewController *__autoreleasing *)browserViewController
+- (BOOL)shouldOpenLandingPageForAd:(ATInterstitial *)ad withURL:(NSURL*)URL useBrowser:(ATBrowserViewController *__autoreleasing *)browserViewController
 {
     if ([URL.scheme compare:@"http" options:NSCaseInsensitiveSearch] == NSOrderedSame ||
         [URL.scheme compare:@"https" options:NSCaseInsensitiveSearch] == NSOrderedSame ) {
