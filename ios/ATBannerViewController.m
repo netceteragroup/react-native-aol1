@@ -63,7 +63,7 @@
 {
     interstitial = [[ATInterstitial alloc] init];
     interstitial.delegate = self.interstitialDelegate;
-    interstitial.viewController = self;
+    interstitial.viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
 
     ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
