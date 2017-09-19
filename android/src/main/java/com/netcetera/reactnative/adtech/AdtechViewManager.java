@@ -87,7 +87,7 @@ public class AdtechViewManager
     public AdtechView createViewInstance(ThemedReactContext context) {
         AdtechView view = new AdtechView(
                 context
-                , (ReactActivity)context.getCurrentActivity()
+                , context.getCurrentActivity()
                 , appName
                 , domain);
 
@@ -105,7 +105,7 @@ public class AdtechViewManager
     @NonNull
     public static AdtechView createAdtechView(ThemedReactContext context) {
         return new AdtechView(context
-                , (ReactActivity)context.getCurrentActivity()
+                , context.getCurrentActivity()
                 , ""
                 , ""
         );

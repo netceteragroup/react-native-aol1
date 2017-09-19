@@ -2,6 +2,7 @@ package com.netcetera.reactnative.adtech;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -44,7 +45,7 @@ class AdtechView extends RelativeLayout {
     private RelativeLayout loadingContainer;
     private ProgressBar loadingProgressBar;
 
-    private ReactActivity activity;
+    private Activity activity;
     private String appName;
     private String domain;
 
@@ -56,7 +57,7 @@ class AdtechView extends RelativeLayout {
 
     private ArrayList<SizeChangeListener> sizeChangeListeners = new ArrayList<>();
 
-    public AdtechView(Context context, ReactActivity activity, String appName, String domain) {
+    public AdtechView(Context context, Activity activity, String appName, String domain) {
         super(context);
         this.appName = appName;
         this.domain = domain;
