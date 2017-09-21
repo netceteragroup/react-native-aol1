@@ -32,6 +32,7 @@ import com.adtech.mobilesdk.publisher.view.BannerResizeBehavior;
 import com.adtech.mobilesdk.publisher.view.BannerResizeProperties;
 import com.adtech.mobilesdk.publisher.view.BannerResizeType;
 import com.netcetera.reactnative.utils.LogUtils;
+import com.facebook.react.bridge.UiThreadUtil;
 
 class AdtechView extends RelativeLayout {
 
@@ -190,7 +191,12 @@ class AdtechView extends RelativeLayout {
         if(type.equalsIgnoreCase("banner")){
             setupBannerAd();
         } else if(type.equalsIgnoreCase("interstitial")){
-            setupInterstitialAd();
+            UiThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setupInterstitialAd();
+                }
+            });
         }
     }
 
@@ -290,12 +296,16 @@ class AdtechView extends RelativeLayout {
 
             adtechInterstitialView = new AdtechInterstitialView(activity.getBaseContext());
             adtechInterstitialView.setLayoutParams(params);
+
             activity.addContentView(adtechInterstitialView, params);
         }
 
         LogUtils.d(TAG, "setupInterstititalAd");
 
-        adtechInterstitialView.setAdConfiguration(getAdConfiguration());
+        AdtechAdConfiguration config = getAdConfiguration();
+        config.setHideAfterRefreshInterval(false);
+
+        adtechInterstitialView.setAdConfiguration(config);
         adtechInterstitialView.setViewCallback(new AdtechInterstitialViewCallback() {
             @Override
             public void onAdLeave() {
@@ -306,6 +316,13 @@ class AdtechView extends RelativeLayout {
             public void onAdDismiss() {
                 super.onAdDismiss();
                 adInterstitialHidden();
+
+                UiThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adtechInterstitialView.setBackgroundColor(0x00000000);
+                    }
+                });
             }
 
             @Override
@@ -317,6 +334,8 @@ class AdtechView extends RelativeLayout {
                 adtechInterstitialView.setVisibility(View.VISIBLE);
                 adtechInterstitialView.bringToFront();
                 adtechInterstitialView.requestLayout();
+                adtechInterstitialView.setBackgroundColor(0xd9000000);
+
             }
 
             @Override
@@ -326,6 +345,8 @@ class AdtechView extends RelativeLayout {
                 adtechInterstitialView.setVisibility(View.VISIBLE);
                 adtechInterstitialView.bringToFront();
                 adtechInterstitialView.requestLayout();
+                adtechInterstitialView.setBackgroundColor(0xd9000000);
+
             }
 
             @Override
