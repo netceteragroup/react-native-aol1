@@ -64,7 +64,8 @@
     interstitial = [[ATInterstitial alloc] init];
     interstitial.delegate = self.interstitialDelegate;
     interstitial.viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-
+    interstitial.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    
     ATAdtechAdConfiguration *configuration = [self adConfiguration];
 
     UIImage *normalStateImage = [UIImage imageNamed:@"close_box_red.png"];
