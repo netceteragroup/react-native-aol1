@@ -2,6 +2,7 @@
 #import "ATBannerViewController.h"
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
 #import <React/RCTLog.h>
+#import "AdtechViewManager.h"
 
 @interface RNAdtechView() {
     ATBannerViewController *bannerVC;
@@ -39,6 +40,16 @@
     [bannerVC.view.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
     [bannerVC.view.leftAnchor constraintEqualToAnchor:self.leftAnchor].active = YES;
     [bannerVC.view.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
+}
+
+- (void)pause
+{
+    [bannerVC pause];
+}
+
+- (void)resume
+{
+    [bannerVC resume];
 }
 
 #pragma mark - Properties from JS
@@ -84,38 +95,19 @@
     [self bannerFetchedSuccessfully:adTechView];
 }
 
-- (void)bannerFetchedSuccessfully:(ATBannerView *)bannerView
-{
-    CGSize desiredSize = [bannerView sizeThatFits:CGSizeMake(self.bounds.size.width, self.maxHeight.floatValue)];
-    desiredSize = CGSizeMake(desiredSize.width, self.maxHeight.floatValue);
-    RCTLogInfo(@"DESIRED SIZE = %f   %f", desiredSize.width, desiredSize.height);
-    [self.delegate adTechView:self requestsResize:desiredSize];
-
-    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
-    if (self.onAdFetchSuccess) {
-        self.onAdFetchSuccess(@{});
-    }
-}
-
 - (void)didFailFetchingAd:(ATBannerView *)view signals:(NSArray *)signals error:(NSError *)error
 {
-    if (self.onAdFetchFail) {
-        self.onAdFetchFail(@{});
-    }
+    [self bannerFetchFailed:view];
 }
 
 - (void)didFailFetchingAd:(ATBannerView *)view
 {
-    if (self.onAdFetchFail) {
-        self.onAdFetchFail(@{});
-    }
+    [self bannerFetchFailed:view];
 }
 
 - (void)didFailFetchingAd:(ATBannerView *)view signals:(NSArray *)signals
 {
-    if (self.onAdFetchFail) {
-        self.onAdFetchFail(@{});
-    }
+    [self bannerFetchFailed:view];
 }
 
 #pragma mark - ATInterstitialDelegate
@@ -169,6 +161,38 @@
         return YES;
     }
     return YES;
+}
+
+#pragma mark - Helpers
+
+- (void)bannerFetchedSuccessfully:(ATBannerView *)bannerView
+{
+    CGSize desiredSize = [bannerView sizeThatFits:CGSizeMake(self.bounds.size.width, self.maxHeight.floatValue)];
+    desiredSize = CGSizeMake(desiredSize.width, self.maxHeight.floatValue);
+    if ([AdtechViewManager isLoggingEnabled]) {
+        RCTLogInfo(@"DESIRED SIZE = %f   %f", desiredSize.width, desiredSize.height);
+    }
+
+    [self.delegate adTechView:self requestsResize:desiredSize];
+
+    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
+    if (self.onAdFetchSuccess) {
+        self.onAdFetchSuccess(@{});
+    }
+}
+
+- (void)bannerFetchFailed:(ATBannerView *)bannerView
+{
+    CGSize desiredSize = CGSizeZero;
+    if ([AdtechViewManager isLoggingEnabled]) {
+        RCTLogInfo(@"DESIRED SIZE = %f   %f", desiredSize.width, desiredSize.height);
+    }
+    [self.delegate adTechView:self requestsResize:desiredSize];
+
+    // A new ad finished loading. You can decide you want to show the banner at this point, if this is the first ad shown.
+    if (self.onAdFetchFail) {
+        self.onAdFetchFail(@{});
+    }
 }
 
 @end

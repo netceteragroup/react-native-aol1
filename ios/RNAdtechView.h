@@ -30,5 +30,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onAdFetchFail;
 @property (nonatomic, copy) RCTDirectEventBlock onInterstitialHidden;
 
+- (void)pause;
+- (void)resume;
 
 @end

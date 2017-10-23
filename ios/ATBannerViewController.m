@@ -2,6 +2,7 @@
 #import <ADTECHMobileSDK/ADTECHMobileSDK.h>
 #import <React/RCTLog.h>
 #import <React/RCTBridge.h>
+#import "AdtechViewManager.h"
 
 @interface ATBannerViewController ()
 {
@@ -18,14 +19,18 @@
     [super viewDidLoad];
 }
 
-- (BOOL)areParametersValid
+- (void)pause
 {
-    if(!self.alias || !self.networkId || !self.subnetworkId || !self.type) {
-        RCTLogError(@"You MUST provide: 'type', 'alias', 'networkId' and 'subnetworkId' parameters in order to see an ad!");
-        return NO;
+    if (bannerView) {
+        bannerView.visible = NO;
     }
+}
 
-    return YES;
+- (void)resume
+{
+    if (bannerView) {
+        bannerView.visible = YES;
+    }
 }
 
 - (void)setupController
@@ -39,6 +44,18 @@
     } else if ([self isType:@"interstitial"]) {
         [self setupInterstitialView];
     }
+}
+
+- (BOOL)areParametersValid
+{
+    if(!self.alias || !self.networkId || !self.subnetworkId || !self.type) {
+        if ([AdtechViewManager isLoggingEnabled]) {
+            RCTLogError(@"You MUST provide: 'type', 'alias', 'networkId' and 'subnetworkId' parameters in order to see an ad!");
+        }
+        return NO;
+    }
+
+    return YES;
 }
 
 - (void)setupBannerView
@@ -110,14 +127,18 @@
                 NSError *error;
 
                 if ([configuration addUserKey:processedKey values:processedValues error:&error]) {
-                    RCTLogInfo(@"Successfully registered key: '%@' with value '%@'"
-                               , processedKey
-                               , processedValues);
+                    if ([AdtechViewManager isLoggingEnabled]) {
+                        RCTLogInfo(@"Successfully registered key: '%@' with value '%@'"
+                                   , processedKey
+                                   , processedValues);
+                    }
                 } else {
-                    RCTLogError(@"Failed to register registered key: '%@' with value '%@'. Reason: %@"
-                               , processedKey
-                               , processedValues
-                               , error.localizedDescription);
+                    if ([AdtechViewManager isLoggingEnabled]) {
+                        RCTLogError(@"Failed to register registered key: '%@' with value '%@'. Reason: %@"
+                                    , processedKey
+                                    , processedValues
+                                    , error.localizedDescription);
+                    }
                 }
             }
         }
@@ -125,17 +146,21 @@
     }
 
     if ([configuration isValid]) {
-        RCTLogInfo(@"Successfully configured an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
-                   , self.alias
-                   , self.networkId
-                   , self.subnetworkId
-                   , self.type);
+        if ([AdtechViewManager isLoggingEnabled]) {
+            RCTLogInfo(@"Successfully configured an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
+                       , self.alias
+                       , self.networkId
+                       , self.subnetworkId
+                       , self.type);
+        }
     } else {
-        RCTLogInfo(@"Failed to configure an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
-                   , self.alias
-                   , self.networkId
-                   , self.subnetworkId
-                   , self.type);
+        if ([AdtechViewManager isLoggingEnabled]) {
+            RCTLogInfo(@"Failed to configure an ad with:\nAlias: %@\nNetwork ID: %@\nSubnetwork ID: %@\nType: %@"
+                       , self.alias
+                       , self.networkId
+                       , self.subnetworkId
+                       , self.type);
+        }
     }
 
     return configuration;

@@ -19,6 +19,18 @@ RCT_EXPORT_VIEW_PROPERTY(onAdFetchSuccess, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdFetchFail, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onInterstitialHidden, RCTDirectEventBlock)
 
+static BOOL isLoggingEnabled = NO;
+
++ (void)setLoggingEnabled:(BOOL)enabled
+{
+    isLoggingEnabled = enabled;
+}
+
++ (BOOL)isLoggingEnabled
+{
+    return isLoggingEnabled;
+}
+
 - (UIView *)view
 {
     RNAdtechView *adTechView = [RNAdtechView new];
@@ -42,6 +54,26 @@ RCT_EXPORT_VIEW_PROPERTY(onInterstitialHidden, RCTDirectEventBlock)
     RCTUIManager *UIManager = [super.bridge uiManager];
 
     [UIManager setSize:newAdSize forView:adTechView];
+}
+
+RCT_EXPORT_METHOD(pause:(nonnull NSNumber *)reactTag){
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if ([view isKindOfClass:[RNAdtechView class]]) {
+            RNAdtechView *adTechView = view;
+            [adTechView pause];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(resume:(nonnull NSNumber *)reactTag){
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if ([view isKindOfClass:[RNAdtechView class]]) {
+            RNAdtechView *adTechView = view;
+            [adTechView resume];
+        }
+    }];
 }
 
 @end
