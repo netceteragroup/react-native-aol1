@@ -128,6 +128,18 @@ class AdtechView extends RelativeLayout {
         checkIfAllParametersWereLoaded();
     }
 
+    public void pauseAd() {
+        if (adtechBannerView != null) {
+            adtechBannerView.stop();
+        }
+    }
+
+    public void resumeAd() {
+        if (adtechBannerView != null) {
+            adtechBannerView.load();
+        }
+    }
+
     public int getReactTag() {
         return reactTag;
     }
@@ -147,6 +159,10 @@ class AdtechView extends RelativeLayout {
         int measuredHeight = (int)(getResources().getDisplayMetrics().density * maxHeight);
 
         fireSizeChange(measuredWidth, measuredHeight);
+    }
+
+    private void updateSizeFail() {
+        fireSizeChange(0, 0);
     }
 
 
@@ -203,15 +219,6 @@ class AdtechView extends RelativeLayout {
     private void setupBannerAd() {
         if (adtechBannerView == null) {
             adtechBannerView = (AdtechBannerView) mainContainer.findViewById(R.id.ad_banner);
-//            LayoutParams params = new LayoutParams(
-//                    LayoutParams.MATCH_PARENT,
-//                    LayoutParams.MATCH_PARENT
-//            );
-////
-//            adtechBannerView = new AdtechBannerView(getContext());
-//            adtechBannerView.setLayoutParams(params);
-//            addView(adtechBannerView);
-
         }
 
         LogUtils.d(TAG, "setupBannerAd");
@@ -232,9 +239,7 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdSuccess() {
                         LogUtils.d(TAG, "onAdSuccess");
-                        adtechBannerView.setVisibility(VISIBLE);
-                        adFecthedSuccessfully();
-                        updateSize();
+                        adSuccess();
                     }
 
                     @Override
@@ -250,7 +255,7 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdFailure(ErrorCause cause) {
                         LogUtils.d(TAG, "onAdFailure");
-                        adFetchFailed();
+                        adFail();
                     }
 
                     @Override
@@ -261,27 +266,35 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public BannerResizeBehavior onAdWillResize(BannerResizeProperties resizeProperties) {
                         LogUtils.d(TAG, "onAdWillResize");
-                        updateSize();
                         return new BannerResizeBehavior(BannerResizeType.INLINE, 3000);
                     }
 
                     @Override
                     public void onAdDidResize(BannerResizeProperties resizeProperties) {
                         LogUtils.d(TAG, "onAdDidResize");
-                        updateSize();
+                        adSuccess();
                     }
 
                     @Override
                     public void onAdFailureWithSignal(ErrorCause cause, int... signals) {
                         LogUtils.d(TAG, "onAdSuccess");
-                        triggerAnEvent("onAdFetchFail");
+                        adFail();
                     }
 
                     @Override
                     public void onAdSuccessWithSignal(int... signals) {
+                        adSuccess();
+                    }
+
+                    void adSuccess() {
                         adtechBannerView.setVisibility(VISIBLE);
                         adFecthedSuccessfully();
                         updateSize();
+                    }
+
+                    void adFail() {
+                        adFetchFailed();
+                        updateSizeFail();
                     }
                 });
         adtechBannerView.load();
@@ -367,23 +380,6 @@ class AdtechView extends RelativeLayout {
             }
         });
         adtechInterstitialView.load();
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        if (adtechBannerView != null) {
-            adtechBannerView.stop();
-        }
-        if (adtechInterstitialView != null) {
-            adtechInterstitialView.stop();
-        }
     }
 
     private final void triggerAnEvent(String eventName) {

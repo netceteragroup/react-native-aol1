@@ -2,9 +2,12 @@ package com.netcetera.reactnative.adtech;
 
 import android.support.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.netcetera.reactnative.utils.LogUtils;
 
@@ -20,6 +23,9 @@ import javax.annotation.Nullable;
 public class AdtechViewManager
         extends BaseViewManager<AdtechView, AdtechShadowNode>
         implements AdtechView.SizeChangeListener {
+
+    public static final int COMMAND_PAUSE = 0;
+    public static final int COMMAND_RESUME = 1;
 
     private static final String TAG = AdtechViewManager.class.getCanonicalName();
     private String appName;
@@ -81,6 +87,39 @@ public class AdtechViewManager
     public void setHeight(AdtechView view, int height) {
         LogUtils.d(TAG, "height = " + height);
         view.setHeight(height);
+    }
+
+    @javax.annotation.Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        /*0*/ map.put("pause", COMMAND_PAUSE);
+        /*1*/ map.put("resume",COMMAND_RESUME);
+        return map;
+    }
+
+    @Override
+    public void receiveCommand(AdtechView root, int commandId, @javax.annotation.Nullable ReadableArray args) {
+        Assertions.assertNotNull(root);
+        Assertions.assertNotNull(args);
+
+        switch (commandId) {
+            case COMMAND_PAUSE:{
+                root.pauseAd();
+                return;
+            }
+            case COMMAND_RESUME: {
+                root.resumeAd();
+                return;
+            }
+
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "Unsupported command %d received by %s.",
+                        commandId,
+                        getClass().getSimpleName()));
+        }
+        //super.receiveCommand(root, commandId, args);
     }
 
     @Override
