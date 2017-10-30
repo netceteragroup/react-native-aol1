@@ -1,28 +1,27 @@
-'use strict';
+'use strict'
 
-import React, { Component } from "react";
-import { requireNativeComponent } from 'react-native';
-import PropTypes, { string, func, number, object } from 'prop-types'
+import React, { Component } from 'react'
+import { requireNativeComponent } from 'react-native'
+import PropTypes from 'prop-types'
 
 class AdTechView extends Component {
   static propTypes = {
-    alias: string.isRequired,
-    type: string.isRequired,
-    networkId: number.isRequired,
-    subnetworkId: number.isRequired,
-    keyValues: object,
-    onAdFetchSuccess: func,
-    onAdFetchFail: func,
-    onInterstitialHidden: func
+    alias: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    networkId: PropTypes.number.isRequired,
+    subnetworkId: PropTypes.number.isRequired,
+    autoload: PropTypes.bool,
+    keyValues: PropTypes.object,
+    onAdFetchSuccess: PropTypes.func,
+    onAdFetchFail: PropTypes.func,
+    onInterstitialHidden: PropTypes.func,
   }
 
   render() {
-    return <RCTAdTechView {...this.props}/>
+    return <RCTAdTechView {...this.props} />
   }
 }
 
-const RCTAdTechView = requireNativeComponent('AdtechView', null);
+const RCTAdTechView = requireNativeComponent('AdtechView', null)
 
-export {
-  AdTechView
-};
+export { AdTechView }

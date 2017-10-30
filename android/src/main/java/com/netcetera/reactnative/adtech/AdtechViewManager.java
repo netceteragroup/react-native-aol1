@@ -12,7 +12,6 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.netcetera.reactnative.utils.LogUtils;
 
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.ReactActivity;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -78,6 +77,12 @@ public class AdtechViewManager
         view.setMaxHeight(maxHeight);
     }
 
+    @ReactProp(name = "autoload")
+    public void setAutoload(AdtechView view, boolean autoload) {
+        LogUtils.d(TAG, "autoload = " + autoload);
+        view.setAutoload(autoload);
+    }
+
     /**
      * to_be_investigated
      * To investigate if this setHeight method can be removed because I think there is already a
@@ -87,6 +92,12 @@ public class AdtechViewManager
     public void setHeight(AdtechView view, int height) {
         LogUtils.d(TAG, "height = " + height);
         view.setHeight(height);
+    }
+
+    @Override
+    protected void onAfterUpdateTransaction(AdtechView view) {
+        super.onAfterUpdateTransaction(view);
+        view.checkIfAllParametersWereLoadedAndLoad();
     }
 
     @javax.annotation.Nullable

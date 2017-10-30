@@ -8,13 +8,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.adtech.mobilesdk.publisher.view.AdtechInterstitialView;
 import com.adtech.mobilesdk.publisher.view.AdtechInterstitialViewCallback;
-import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -51,7 +49,6 @@ class AdtechView extends RelativeLayout {
     private String domain;
 
     private int reactTag;
-    private boolean postponedResize = false;
 
     private AdtechBannerView adtechBannerView;
     private AdtechInterstitialView adtechInterstitialView;
@@ -72,60 +69,63 @@ class AdtechView extends RelativeLayout {
         setLoadingView();
     }
 
-    private void checkIfAllParametersWereLoaded() {
-        if (alias != null && type != null && networkId > 0 && subnetworkId > 0)
+    public void checkIfAllParametersWereLoadedAndLoad() {
+        if (alias != null
+                && type != null
+                && networkId > 0
+                && subnetworkId > 0
+                && autoloadAd)
         {
             loadAd();
         }
+    }
+
+    private boolean autoloadAd = true;
+
+    public void setAutoload(boolean autoloadAd) {
+        this.autoloadAd = autoloadAd;
     }
 
     private String alias;
 
     public void setAlias(String alias) {
         this.alias = alias;
-        checkIfAllParametersWereLoaded();
     }
 
     private String type;
 
     public void setType(String type) {
         this.type = type;
-        checkIfAllParametersWereLoaded();
     }
 
     private int networkId;
 
     public void setNetworkId(int networkId) {
         this.networkId = networkId;
-        checkIfAllParametersWereLoaded();
     }
 
     private int subnetworkId;
 
     public void setSubnetworkId(int subnetworkId) {
         this.subnetworkId = subnetworkId;
-        checkIfAllParametersWereLoaded();
     }
 
     private ReadableMap keyValues;
 
     public void setKeyValues(ReadableMap keyValues) {
         this.keyValues = keyValues;
-        checkIfAllParametersWereLoaded();
     }
 
     private int maxHeight;
 
     public void setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
-        checkIfAllParametersWereLoaded();
     }
 
     private int height;
 
     public void setHeight(int height){
         this.height = height;
-        checkIfAllParametersWereLoaded();
     }
 
     public void pauseAd() {
@@ -255,7 +255,10 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public void onAdFailure(ErrorCause cause) {
                         LogUtils.d(TAG, "onAdFailure");
+
+                        adtechBannerView.setVisibility(GONE);
                         adFail();
+                        updateSizeFail();
                     }
 
                     @Override
@@ -266,7 +269,7 @@ class AdtechView extends RelativeLayout {
                     @Override
                     public BannerResizeBehavior onAdWillResize(BannerResizeProperties resizeProperties) {
                         LogUtils.d(TAG, "onAdWillResize");
-                        return new BannerResizeBehavior(BannerResizeType.INLINE, 3000);
+                        return new BannerResizeBehavior(BannerResizeType.INLINE, 0);
                     }
 
                     @Override
@@ -287,12 +290,14 @@ class AdtechView extends RelativeLayout {
                     }
 
                     void adSuccess() {
+                        adtechBannerView.setHardwareAccelerationEnabledForCurrentAd(true);
                         adtechBannerView.setVisibility(VISIBLE);
                         adFecthedSuccessfully();
                         updateSize();
                     }
 
                     void adFail() {
+                        adtechBannerView.setVisibility(GONE);
                         adFetchFailed();
                         updateSizeFail();
                     }
