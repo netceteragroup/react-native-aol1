@@ -14,6 +14,7 @@ RCT_EXPORT_VIEW_PROPERTY(networkId, NSNumber *)
 RCT_EXPORT_VIEW_PROPERTY(subnetworkId, NSNumber *)
 RCT_EXPORT_VIEW_PROPERTY(keyValues, NSDictionary *)
 RCT_EXPORT_VIEW_PROPERTY(maxHeight, NSNumber *)
+RCT_EXPORT_VIEW_PROPERTY(autoload, BOOL)
 
 RCT_EXPORT_VIEW_PROPERTY(onAdFetchSuccess, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdFetchFail, RCTDirectEventBlock)

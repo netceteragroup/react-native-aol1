@@ -25,6 +25,7 @@
 @property (nonatomic) NSNumber *subnetworkId;
 @property (nonatomic) NSDictionary *keyValues;
 @property (nonatomic) NSNumber *maxHeight;
+@property (nonatomic, assign) BOOL autoload;
 
 @property (nonatomic, copy) RCTDirectEventBlock onAdFetchSuccess;
 @property (nonatomic, copy) RCTDirectEventBlock onAdFetchFail;

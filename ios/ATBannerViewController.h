@@ -11,6 +11,7 @@
 @property (nonatomic) NSNumber *networkId;
 @property (nonatomic) NSNumber *subnetworkId;
 @property (nonatomic) NSDictionary *keyValues;
+@property (nonatomic, assign) BOOL autoload;
 
 - (void)setupController;
 

@@ -22,6 +22,10 @@ class AdTechView extends Component {
   }
 }
 
+AdTechView.defaultProps = {
+  autoload: true,
+}
+
 const RCTAdTechView = requireNativeComponent('AdtechView', null)
 
 export { AdTechView }

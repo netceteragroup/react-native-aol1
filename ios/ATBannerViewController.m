@@ -29,6 +29,7 @@
 - (void)resume
 {
     if (bannerView) {
+        [bannerView load];
         bannerView.visible = YES;
     }
 }
@@ -73,7 +74,9 @@
 
     [self.view addSubview:bannerView];
 
-    [bannerView load];
+    if (self.autoload) {
+        [bannerView load];
+    }
 }
 
 - (void)setupInterstitialView
@@ -93,7 +96,9 @@
 
     interstitial.configuration = configuration;
 
-    [interstitial load];
+    if (self.autoload) {
+        [interstitial load];
+    }
 }
 
 #pragma mark - Helpers

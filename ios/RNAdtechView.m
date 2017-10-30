@@ -66,6 +66,7 @@
         bannerVC.networkId = self.networkId;
         bannerVC.subnetworkId = self.subnetworkId;
         bannerVC.keyValues = self.keyValues;
+        bannerVC.autoload = self.autoload;
 
         [bannerVC setupController];
     }
