@@ -456,7 +456,11 @@ class AdtechView extends RelativeLayout {
 
                 String processedKey = key.startsWith("kv") ? key.substring("kv".length()) : key;
 
-                configuration.addKeyValueParameter(processedKey, processedValues);
+                if (processedValues.length == 1) {
+                    configuration.addKeyValueParameter(processedKey, processedValues[0]);
+                } else {
+                    configuration.addKeyValueParameter(processedKey, processedValues);
+                }
             }
         }
 
