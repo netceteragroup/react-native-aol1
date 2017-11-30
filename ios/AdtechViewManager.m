@@ -51,10 +51,23 @@ static BOOL isLoggingEnabled = NO;
     CGSize newAdSize = newSize;
 
     RCTLogInfo(@"New Ad banner size: %f,%f", newAdSize.width, newAdSize.height);
-    //getting the UI manager and set the intrinsic content size of the tweet view
+
     RCTUIManager *UIManager = [super.bridge uiManager];
 
-    [UIManager setSize:newAdSize forView:adTechView];
+    if (view.reactTag) {
+        __block RCTShadowView *shadowView = nil;
+
+        dispatch_sync(RCTGetUIManagerQueue(), ^{
+            shadowView = [UIManager shadowViewForReactTag:view.reactTag];
+        });
+        UIView *reactView = [UIManager viewForReactTag:view.reactTag];
+
+        if (shadowView && reactView) {
+            [UIManager setSize:newAdSize forView:adTechView];
+        }
+    } else {
+        RCTLogInfo(@"Ad banner size can't be updated. View is no longer in tree.");
+    }
 }
 
 RCT_EXPORT_METHOD(pause:(nonnull NSNumber *)reactTag){
