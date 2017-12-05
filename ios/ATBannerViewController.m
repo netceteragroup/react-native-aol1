@@ -74,6 +74,11 @@
 
     [self.view addSubview:bannerView];
 
+    [bannerView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+    [bannerView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    [bannerView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active = YES;
+    [bannerView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active = YES;
+
     if (self.autoload) {
         [bannerView load];
     }
