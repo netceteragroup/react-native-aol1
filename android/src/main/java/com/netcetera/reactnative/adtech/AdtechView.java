@@ -344,12 +344,12 @@ class AdtechView extends RelativeLayout {
                 super.onAdDismiss();
                 adInterstitialHidden();
 
-//                UiThreadUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        adtechInterstitialView.setBackgroundColor(0x00000000);
-//                    }
-//                });
+                UiThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adtechInterstitialView.setBackgroundColor(0x00000000);
+                    }
+                });
             }
 
             @Override
