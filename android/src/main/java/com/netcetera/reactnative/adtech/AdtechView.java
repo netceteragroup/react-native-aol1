@@ -216,6 +216,15 @@ class AdtechView extends RelativeLayout {
         }
     }
 
+    public void disposeAd() {
+        if (adtechBannerView != null) {
+            adtechBannerView.stop();
+        }
+        if (adtechInterstitialView != null) {
+            adtechInterstitialView.stop();
+        }
+    }
+
     private void setupBannerAd() {
         if (adtechBannerView == null) {
             adtechBannerView = (AdtechBannerView) mainContainer.findViewById(R.id.ad_banner);
@@ -335,12 +344,12 @@ class AdtechView extends RelativeLayout {
                 super.onAdDismiss();
                 adInterstitialHidden();
 
-                UiThreadUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adtechInterstitialView.setBackgroundColor(0x00000000);
-                    }
-                });
+//                UiThreadUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        adtechInterstitialView.setBackgroundColor(0x00000000);
+//                    }
+//                });
             }
 
             @Override
