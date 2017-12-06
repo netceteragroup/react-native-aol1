@@ -19,6 +19,22 @@
     [super viewDidLoad];
 }
 
+- (void)cleanup
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    if (bannerView) {
+        bannerView.visible = NO;
+        bannerView.viewController = nil;
+        [bannerView removeFromSuperview];
+        bannerView = nil;
+    }
+    if (interstitial) {
+        [interstitial dismiss];
+        interstitial.viewController = nil;
+        interstitial = nil;
+    }
+}
+
 - (void)pause
 {
     if (bannerView) {
@@ -79,7 +95,12 @@
     [bannerView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor].active = YES;
     [bannerView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor].active = YES;
 
-    if (self.autoload) {
+    [self performSelector:@selector(loadBanner) withObject:nil afterDelay:2];
+}
+
+- (void)loadBanner
+{
+    if (bannerView) {
         [bannerView load];
     }
 }
@@ -102,6 +123,13 @@
     interstitial.configuration = configuration;
 
     if (self.autoload) {
+        [self performSelector:@selector(loadInterstitial) withObject:nil afterDelay:2];
+    }
+}
+
+- (void)loadInterstitial
+{
+    if (interstitial) {
         [interstitial load];
     }
 }

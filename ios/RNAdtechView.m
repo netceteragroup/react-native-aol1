@@ -42,6 +42,13 @@
     [bannerVC.view.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
 }
 
+-(void)didMoveToWindow
+{
+    [super didMoveToWindow]; // (does nothing by default)
+    if (self.window == nil) {
+        [bannerVC cleanup];
+    }
+}
 - (void)pause
 {
     [bannerVC pause];
