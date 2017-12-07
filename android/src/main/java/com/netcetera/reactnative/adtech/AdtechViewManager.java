@@ -148,6 +148,7 @@ public class AdtechViewManager
     @Override
     public void onDropViewInstance(AdtechView view) {
         view.removeSizeChangeListener(this);
+        view.disposeAd();
         super.onDropViewInstance(view);
     }
 

@@ -216,6 +216,15 @@ class AdtechView extends RelativeLayout {
         }
     }
 
+    public void disposeAd() {
+        if (adtechBannerView != null) {
+            adtechBannerView.stop();
+        }
+        if (adtechInterstitialView != null) {
+            adtechInterstitialView.stop();
+        }
+    }
+
     private void setupBannerAd() {
         if (adtechBannerView == null) {
             adtechBannerView = (AdtechBannerView) mainContainer.findViewById(R.id.ad_banner);
