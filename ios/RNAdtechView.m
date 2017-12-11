@@ -42,13 +42,14 @@
     [bannerVC.view.rightAnchor constraintEqualToAnchor:self.rightAnchor].active = YES;
 }
 
--(void)didMoveToWindow
+- (void)didMoveToSuperview
 {
-    [super didMoveToWindow]; // (does nothing by default)
-    if (self.window == nil) {
+    [super didMoveToSuperview];
+    if (!self.superview) {
         [bannerVC cleanup];
     }
 }
+
 - (void)pause
 {
     [bannerVC pause];
@@ -143,7 +144,6 @@
     }
     [ad present];
 }
-
 
 - (void)didFailFetchingInterstitialAd:(ATInterstitial *)ad signals:(NSArray *)signals
 {
