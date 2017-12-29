@@ -6,4 +6,6 @@
 + (void)setLoggingEnabled:(BOOL)enabled;
 + (BOOL)isLoggingEnabled;
 
++ (void)setSignalsForEmptyAds:(NSArray *)signalsForEmptyAds;
+
 @end

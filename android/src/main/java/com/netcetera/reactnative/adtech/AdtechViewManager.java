@@ -2,7 +2,9 @@ package com.netcetera.reactnative.adtech;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.facebook.infer.annotation.Assertions;
@@ -29,10 +31,12 @@ public class AdtechViewManager
     private static final String TAG = AdtechViewManager.class.getCanonicalName();
     private String appName;
     private String domain;
+    private List<Integer> signalsForEmptyAds;
 
-    public AdtechViewManager(String appName, String domain) {
+    public AdtechViewManager(String appName, String domain, List<Integer> signalsForEmptyAds) {
         this.domain = domain;
         this.appName = appName;
+        this.signalsForEmptyAds = signalsForEmptyAds;
     }
 
     @Override
@@ -139,7 +143,8 @@ public class AdtechViewManager
                 context
                 , context.getCurrentActivity()
                 , appName
-                , domain);
+                , domain
+                , signalsForEmptyAds);
 
         view.addSizeChangeListener(this);
         return view;
@@ -159,6 +164,7 @@ public class AdtechViewManager
                 , context.getCurrentActivity()
                 , ""
                 , ""
+                , new ArrayList<Integer>()
         );
     }
 
