@@ -539,11 +539,11 @@ class AdtechView extends RelativeLayout {
         if (signals == null || signals.length == 0) return true;
         if (signalsForEmptyAds == null || signalsForEmptyAds.isEmpty()) return true;
 
-        Boolean shouldShow = false;
+        Boolean shouldShow = true;
 
         for (int signal : signals) {
             if (signalsForEmptyAds.contains(signal)) {
-                shouldShow = true;
+                shouldShow = false;
                 break;
             }
         }
