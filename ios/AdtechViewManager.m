@@ -21,6 +21,7 @@ RCT_EXPORT_VIEW_PROPERTY(onAdFetchFail, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onInterstitialHidden, RCTDirectEventBlock)
 
 static BOOL isLoggingEnabled = NO;
+static NSArray *signalsForEmptyAdverts = nil;
 
 + (void)setLoggingEnabled:(BOOL)enabled
 {
@@ -32,9 +33,15 @@ static BOOL isLoggingEnabled = NO;
     return isLoggingEnabled;
 }
 
++ (void)setSignalsForEmptyAds:(NSArray *)signalsForEmptyAds
+{
+    signalsForEmptyAdverts = signalsForEmptyAds;
+}
+
 - (UIView *)view
 {
     RNAdtechView *adTechView = [RNAdtechView new];
+    adTechView.signalsForEmptyAds = signalsForEmptyAdverts ? signalsForEmptyAdverts : @[];
     adTechView.delegate = self;
 
     return adTechView;

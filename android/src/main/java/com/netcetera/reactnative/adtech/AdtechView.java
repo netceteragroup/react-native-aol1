@@ -1,6 +1,7 @@
 package com.netcetera.reactnative.adtech;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,6 +48,7 @@ class AdtechView extends RelativeLayout {
     private Activity activity;
     private String appName;
     private String domain;
+    private List<Integer> signalsForEmptyAds;
 
     private int reactTag;
 
@@ -55,10 +57,16 @@ class AdtechView extends RelativeLayout {
 
     private ArrayList<SizeChangeListener> sizeChangeListeners = new ArrayList<>();
 
-    public AdtechView(Context context, Activity activity, String appName, String domain) {
+    public AdtechView(Context context
+            , Activity activity
+            , String appName
+            , String domain
+            , List<Integer> signalsForEmptyAds) {
         super(context);
         this.appName = appName;
         this.domain = domain;
+        this.signalsForEmptyAds = signalsForEmptyAds;
+
         this.activity = activity;
 
         //activity.getLayoutInflater().inflate(R.layout.add_container, this, true);
@@ -295,7 +303,12 @@ class AdtechView extends RelativeLayout {
 
                     @Override
                     public void onAdSuccessWithSignal(int... signals) {
-                        adSuccess();
+                        Boolean shouldShow = shouldShowAdWithSignals(signals);
+                        if (shouldShow) {
+                            adSuccess();
+                        } else {
+                            adFail();
+                        }
                     }
 
                     void adSuccess() {
@@ -368,12 +381,18 @@ class AdtechView extends RelativeLayout {
             @Override
             public void onAdSuccessWithSignal(int... signals) {
                 super.onAdSuccessWithSignal(signals);
-                adFecthedSuccessfully();
-                adtechInterstitialView.setVisibility(View.VISIBLE);
-                adtechInterstitialView.bringToFront();
-                adtechInterstitialView.requestLayout();
-                adtechInterstitialView.setBackgroundColor(0xd9000000);
 
+                Boolean shouldShow = shouldShowAdWithSignals(signals);
+
+                if (shouldShow) {
+                    adFecthedSuccessfully();
+                    adtechInterstitialView.setVisibility(View.VISIBLE);
+                    adtechInterstitialView.bringToFront();
+                    adtechInterstitialView.requestLayout();
+                    adtechInterstitialView.setBackgroundColor(0xd9000000);
+                } else {
+                    adFetchFailed();
+                }
             }
 
             @Override
@@ -513,5 +532,21 @@ class AdtechView extends RelativeLayout {
         }
 
         return result.toArray(new String[]{});
+    }
+
+    private Boolean shouldShowAdWithSignals(int... signals)
+    {
+        if (signals == null || signals.length == 0) return true;
+        if (signalsForEmptyAds == null || signalsForEmptyAds.isEmpty()) return true;
+
+        Boolean shouldShow = true;
+
+        for (int signal : signals) {
+            if (signalsForEmptyAds.contains(signal)) {
+                shouldShow = false;
+                break;
+            }
+        }
+        return shouldShow;
     }
 }

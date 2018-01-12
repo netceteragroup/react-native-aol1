@@ -96,7 +96,17 @@
 
 - (void)didFetchNextAd:(ATBannerView *)adTechView signals:(NSArray *)signals
 {
-    [self bannerFetchedSuccessfully:adTechView];
+    BOOL shouldShow = [self shouldShowAdWithSignals:signals];
+    if (shouldShow) {
+        [self bannerFetchedSuccessfully:adTechView];
+    } else {
+        [self.delegate adTechView:self requestsResize:CGSizeZero];
+
+        // if an empty ad was fetched, consider it a failure.
+        if (self.onAdFetchFail) {
+            self.onAdFetchFail(@{});
+        }
+    }
 }
 
 - (void)didFetchNextAd:(ATBannerView *)adTechView
@@ -139,10 +149,18 @@
 
 - (void)didSuccessfullyFetchInterstitialAd:(ATInterstitial *)ad signals:(NSArray *)signals
 {
-    if (self.onAdFetchSuccess) {
-        self.onAdFetchSuccess(@{});
+    BOOL shouldShow = [self shouldShowAdWithSignals:signals];
+    if (shouldShow) {
+        if (self.onAdFetchSuccess) {
+            self.onAdFetchSuccess(@{});
+        }
+        [ad present];
+    } else {
+        // if an empty ad was fetched, consider it a failure.
+        if (self.onAdFetchFail) {
+            self.onAdFetchFail(@{});
+        }
     }
-    [ad present];
 }
 
 - (void)didFailFetchingInterstitialAd:(ATInterstitial *)ad signals:(NSArray *)signals
@@ -201,6 +219,24 @@
     if (self.onAdFetchFail) {
         self.onAdFetchFail(@{});
     }
+}
+
+#pragma mark - Helpers
+
+- (BOOL)shouldShowAdWithSignals:(NSArray *)signals
+{
+    if (!signals || [signals count] == 0) return YES;
+    if (!self.signalsForEmptyAds || [self.signalsForEmptyAds count] == 0) return YES;
+
+    BOOL shouldShow = YES;
+
+    for (id signal in signals) {
+        if ([self.signalsForEmptyAds containsObject:signal]) {
+            shouldShow = NO;
+            break;
+        }
+    }
+    return shouldShow;
 }
 
 @end

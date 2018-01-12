@@ -6,6 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +15,12 @@ public class AdtechViewPackage implements ReactPackage {
 
     private String appName;
     private String domain;
+    private List<Integer> signalsForEmptyAds;
 
-    public AdtechViewPackage(String appName, String domain) {
+    public AdtechViewPackage(String appName, String domain, List<Integer> signalsForEmptyAds) {
         this.appName = appName;
         this.domain = domain;
+        this.signalsForEmptyAds = signalsForEmptyAds != null ? signalsForEmptyAds : new ArrayList<Integer>();
     }
 
     @Override
@@ -29,7 +32,7 @@ public class AdtechViewPackage implements ReactPackage {
     public List<ViewManager> createViewManagers(
             ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new AdtechViewManager(appName, domain)
+                new AdtechViewManager(appName, domain, signalsForEmptyAds)
         );
     }
 }
