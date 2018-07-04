@@ -3,6 +3,9 @@
 #import "RNAdtechShadowView.h"
 #import <React/RCTLog.h>
 #import <React/RCTUIManager.h>
+#if __has_include(<React/RCTUIManagerUtils.h>)
+#import <React/RCTUIManagerUtils.h>
+#endif
 
 @implementation AdtechViewManager
 
